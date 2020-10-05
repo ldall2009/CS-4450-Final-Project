@@ -20,10 +20,10 @@ public class FPCameraController {
     private static final int LEFT = Keyboard.KEY_A;
     private static final int RIGHT = Keyboard.KEY_D;
     
-//    private static final int FORWARD_ARROW = 
-//    private static final int BACKWARD_ARROW = 
-//    private static final int LEFT_ARROW = 
-//    private static final int RIGHT_ARROW = 
+    private static final int FORWARD_ARROW = Keyboard.KEY_UP;
+    private static final int BACKWARD_ARROW = Keyboard.KEY_DOWN;
+    private static final int LEFT_ARROW = Keyboard.KEY_LEFT;
+    private static final int RIGHT_ARROW = Keyboard.KEY_RIGHT;
     
     // 3d vector to store the camera's position in
     private Vector3f position = null;
@@ -145,21 +145,21 @@ public class FPCameraController {
             // we times the movementSpeed with dt this is a time scale
             // so if its a slow frame u move more then a fast frame
             // so on a slow computer you move just as fast as on a fast computer
-            if (Keyboard.isKeyDown(FORWARD))// move forward
+            if (Keyboard.isKeyDown(FORWARD) || Keyboard.isKeyDown(FORWARD_ARROW))// move forward
             {
                 camera.walkForward(movementSpeed);
             }
             
-            if (Keyboard.isKeyDown(BACKWARD))// move backwards
+            if (Keyboard.isKeyDown(BACKWARD) || Keyboard.isKeyDown(BACKWARD_ARROW))// move backwards
             {
                 camera.walkBackwards(movementSpeed);
             }
             
-            if (Keyboard.isKeyDown(LEFT)) {// strafe left {
+            if (Keyboard.isKeyDown(LEFT) || Keyboard.isKeyDown(LEFT_ARROW)) {// strafe left {
                 camera.strafeLeft(movementSpeed);
             }
             
-            if (Keyboard.isKeyDown(RIGHT))// strafe right {
+            if (Keyboard.isKeyDown(RIGHT) || Keyboard.isKeyDown(RIGHT_ARROW))// strafe right {
             {
                 camera.strafeRight(movementSpeed);
             }
