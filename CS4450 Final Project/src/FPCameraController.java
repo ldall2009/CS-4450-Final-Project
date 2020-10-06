@@ -1,5 +1,16 @@
-
-//First Person Camera Controller class
+/***************************************************************
+* file: FPCameraController.java
+* author: N. Vinjamury, D. Edwards, L. Dall
+* class: CS 4450 - Computer Graphics
+*
+* assignment: Semester Project - Checkpoint 1
+* date last modified: 10/5/2020
+*
+* purpose: This file/class is responsible for allowing the user to move 
+*   and modify the first-person camera in order to interact within the
+*   3D environment.
+*
+****************************************************************/ 
 
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.input.Keyboard;
@@ -27,37 +38,57 @@ public class FPCameraController {
     
     // 3d vector to store the camera's position in
     private Vector3f position = null;
-    private Vector3f lPosition = null;
+    private Vector3f lookPosition = null;
     
     // the rotation around the Y axis of the camera
     private float yaw = 0.0f;
     
     // the rotation around the X axis of the camera
     private float pitch = 0.0f;
+    
     private Vector3Float me;
 
+    /***************************************************************
+    * method: FPCameraController
+    * purpose: constructor used to instantiate the position Vector3f.
+    *   It instantiates the position of the user as well as their initial
+    *   "look" position
+    *
+    ****************************************************************/ 
     public FPCameraController(float x, float y, float z) {
-        // instantiate position Vector3f to the x y z params.
         position = new Vector3f(x, y, z);
-        lPosition = new Vector3f(x, y, z);
-        lPosition.x = 0f;
-        lPosition.y = 15f;
-        lPosition.z = 0f;
+        lookPosition = new Vector3f(x, y, z);
+        lookPosition.x = 0f;
+        lookPosition.y = 15f;
+        lookPosition.z = 0f;
     }
 
-    // increment the camera's current yaw rotation
+    /***************************************************************
+    * method: yaw
+    * purpose: increments the camera's current yaw rotation
+    *
+    ****************************************************************/ 
     public void yaw(float amount) {
         // increment the yaw by the amount param
         yaw += amount;
     }
 
-    // increment the camera's current yaw rotation
+    /***************************************************************
+    * method: pitch
+    * purpose: decrements the camera's current pitch rotation
+    *
+    ****************************************************************/ 
     public void pitch(float amount) {
-        // increment the pitch by the amount param
+        // decrement the pitch by the amount param
         pitch -= amount;
     }
 
-    // moves the camera forward relative to its current rotation (yaw)
+    /***************************************************************
+    * method: walkForward
+    * purpose: moves the camera forward relative to its current rotation
+    *   (yaw)
+    *
+    ****************************************************************/ 
     public void walkForward(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
@@ -65,7 +96,12 @@ public class FPCameraController {
         position.z += zOffset;
     }
 
-    // moves the camera backward relative to its current rotation (yaw)
+    /***************************************************************
+    * method: walkBackwards
+    * purpose: moves the camera backward relative to its current rotation
+    *   (yaw)
+    *
+    ****************************************************************/
     public void walkBackwards(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
@@ -73,7 +109,12 @@ public class FPCameraController {
         position.z -= zOffset;
     }
 
-    // strafes the camera left relative to its current rotation (yaw)
+    /***************************************************************
+    * method: strafeLeft
+    * purpose: strafes the camera left relative to its current rotation
+    *   (yaw)
+    *
+    ****************************************************************/ 
     public void strafeLeft(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw - 90));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw - 90));
@@ -81,7 +122,12 @@ public class FPCameraController {
         position.z += zOffset;
     }
 
-    // strafes the camera right relative to its current rotation (yaw)
+    /***************************************************************
+    * method: strafeRight
+    * purpose: strafes the camera right relative to its current rotation
+    *   (yaw)
+    *
+    ****************************************************************/ 
     public void strafeRight(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw + 90));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw + 90));
@@ -89,18 +135,30 @@ public class FPCameraController {
         position.z += zOffset;
     }
 
-    // moves the camera up relative to its current rotation (yaw)
+    /***************************************************************
+    * method: moveUp
+    * purpose: moves the camera up
+    *
+    ****************************************************************/ 
     public void moveUp(float distance) {
         position.y -= distance;
     }
 
-    // moves the camera down
+    /***************************************************************
+    * method: moveDown
+    * purpose: moves the camera down
+    *
+    ****************************************************************/ 
     public void moveDown(float distance) {
         position.y += distance;
     }
 
-    // translates and rotate the matrix so that it looks through the camera
-    // this does basically what gluLookAt() does
+    /***************************************************************
+    * method: lookThrough
+    * purpose: translates and rotates the matrix so that it looks through
+    *   the camera.  This does basically what gluLookAt() does
+    *
+    ****************************************************************/ 
     public void lookThrough() {
         // rotate the pitch around the X axis
         glRotatef(pitch, 1.0f, 0.0f, 0.0f);
@@ -110,6 +168,13 @@ public class FPCameraController {
         glTranslatef(position.x, position.y, position.z);
     }
 
+    /***************************************************************
+    * method: gameLoop
+    * purpose: the primary game loop for this program.  Responsible for
+    *   calling relevant methods to respond to things like rendering, user
+    *   input, etc.
+    *
+    ****************************************************************/ 
     public void gameLoop() {
         FPCameraController camera = new FPCameraController(0, 0, 0);
         float dx = 0.0f;
@@ -190,6 +255,11 @@ public class FPCameraController {
         Display.destroy();
     }
 
+    /***************************************************************
+    * method: render
+    * purpose: renders shapes into the 3D space.
+    *
+    ****************************************************************/ 
     private void render() {
         try {
             glBegin(GL_QUADS);
