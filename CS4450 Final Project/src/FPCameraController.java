@@ -18,11 +18,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.Sys;
+import Input.*;
 
 public class FPCameraController {
     
     private static final int ESCAPE = Keyboard.KEY_ESCAPE;
 
+	/*
     private static final int UP = Keyboard.KEY_SPACE;
     private static final int DOWN = Keyboard.KEY_LSHIFT;
     
@@ -35,6 +37,17 @@ public class FPCameraController {
     private static final int BACKWARD_ARROW = Keyboard.KEY_DOWN;
     private static final int LEFT_ARROW = Keyboard.KEY_LEFT;
     private static final int RIGHT_ARROW = Keyboard.KEY_RIGHT;
+	*/
+	private static final int VERTICAL_AXIS = 0;
+
+	private static final int FORWARD_AXIS  = 1;
+	private static final int STRAFE_AXIS   = 2;
+
+	private static final int FORWARD_AXIS_ALT  = 3;
+	private static final int STRAFE_AXIS_ALT   = 4;
+
+	private InputManager input;
+
     
     // 3d vector to store the camera's position in
     private Vector3f position = null;
@@ -61,6 +74,14 @@ public class FPCameraController {
         lookPosition.x = 0f;
         lookPosition.y = 15f;
         lookPosition.z = 0f;
+
+		input = new InputManager();
+		input.addButton(ESCAPE, ESCAPE);
+		input.addAxis(VERTICAL_AXIS, Keyboard.KEY_SPACE, Keyboard.KEY_LSHIFT);
+		input.addAxis(FORWARD_AXIS, Keyboard.KEY_W, Keyboard.KEY_S);
+		input.addAxis(STRAFE_AXIS, Keyboard.KEY_D, Keyboard.KEY_A);
+		input.addAxis(FORWARD_AXIS_ALT, Keyboard.KEY_UP, Keyboard.KEY_DOWN);
+		input.addAxis(STRAFE_AXIS_ALT, Keyboard.KEY_RIGHT, Keyboard.KEY_LEFT);
     }
 
     /***************************************************************
@@ -187,8 +208,11 @@ public class FPCameraController {
         // hide the mouse
         Mouse.setGrabbed(true);
 
+		input.update();
         // keep looping till the display window is closed the ESC key is down
-        while (!Display.isCloseRequested() && !Keyboard.isKeyDown(ESCAPE)) {
+        //while (!Display.isCloseRequested() && !Keyboard.isKeyDown(ESCAPE)) {
+        while (!Display.isCloseRequested() && !input.isDown(ESCAPE)) {
+			input.update();
             time = Sys.getTime();
             lastTime = time;
             
@@ -210,33 +234,15 @@ public class FPCameraController {
             // we times the movementSpeed with dt this is a time scale
             // so if its a slow frame u move more then a fast frame
             // so on a slow computer you move just as fast as on a fast computer
-            if (Keyboard.isKeyDown(FORWARD) || Keyboard.isKeyDown(FORWARD_ARROW))// move forward
-            {
-                camera.walkForward(movementSpeed);
-            }
-            
-            if (Keyboard.isKeyDown(BACKWARD) || Keyboard.isKeyDown(BACKWARD_ARROW))// move backwards
-            {
-                camera.walkBackwards(movementSpeed);
-            }
-            
-            if (Keyboard.isKeyDown(LEFT) || Keyboard.isKeyDown(LEFT_ARROW)) {// strafe left {
-                camera.strafeLeft(movementSpeed);
-            }
-            
-            if (Keyboard.isKeyDown(RIGHT) || Keyboard.isKeyDown(RIGHT_ARROW))// strafe right {
-            {
-                camera.strafeRight(movementSpeed);
-            }
-            
-            if (Keyboard.isKeyDown(UP)) // move up
-            {
-                camera.moveUp(movementSpeed);
-            }
+			int forwardAxis = input.getAxis(FORWARD_AXIS) + input.getAxis(FORWARD_AXIS_ALT);
+			forwardAxis = Math.max(-1, Math.min(forwardAxis, 1));
+			camera.walkForward(forwardAxis * movementSpeed);
 
-            if (Keyboard.isKeyDown(DOWN)) {
-                camera.moveDown(movementSpeed);
-            }
+			int strafeAxis = input.getAxis(STRAFE_AXIS) + input.getAxis(STRAFE_AXIS_ALT);
+			strafeAxis = Math.max(-1, Math.min(strafeAxis, 1));
+			camera.strafeRight(strafeAxis * movementSpeed);
+			camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
+            
             
             // set the modelview matrix back to the identity
             glLoadIdentity();
