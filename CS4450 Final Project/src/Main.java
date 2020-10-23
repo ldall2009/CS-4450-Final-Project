@@ -23,8 +23,8 @@ public class Main {
     private static final int SCREEN_WIDTH = 640;
     private static final int SCREEN_HEIGHT = 480;
     
-    private FPCameraController fp = new FPCameraController(0f, 0f, 0f);
     private DisplayMode displayMode;
+    private FPCameraController fp;
 
     /***************************************************************
     * method: start
@@ -32,6 +32,7 @@ public class Main {
     *
     ****************************************************************/ 
     public void start() {
+        fp = new FPCameraController(0f, 0f, 0f);
         try {
             createWindow();
             initGL();
@@ -70,7 +71,11 @@ public class Main {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glEnable(GL_DEPTH_TEST);    //Renders the cube so no faces are visible when looking at another face
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_TEXTURE_2D);
+        glEnableClientState (GL_TEXTURE_COORD_ARRAY);
         GLU.gluPerspective(100.0f, (float) displayMode.getWidth() / (float) displayMode.getHeight(), 0.1f, 300.0f);
         glMatrixMode(GL_MODELVIEW);
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);

@@ -47,6 +47,7 @@ public class FPCameraController {
     private float pitch = 0.0f;
     
     private Vector3Float me;
+    private Chunks chunk ;
 
     /***************************************************************
     * method: FPCameraController
@@ -61,6 +62,8 @@ public class FPCameraController {
         lookPosition.x = 0f;
         lookPosition.y = 15f;
         lookPosition.z = 0f;
+        
+        chunk = new Chunks(-30, -30, -30);
     }
 
     /***************************************************************
@@ -246,7 +249,8 @@ public class FPCameraController {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             // you would draw your scene here.
-            render();
+            //render();
+            chunk.render();
             
             // draw the buffer to the screen
             Display.update();
