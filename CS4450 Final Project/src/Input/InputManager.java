@@ -119,6 +119,15 @@ public class InputManager {
 		return result;		
 	}
 
+	/**
+	 * Combines the results of multiple virtual axis.
+	 * 
+	 * This result is constrained between -1 and 1. Use this when there are
+	 * multiple virtual axis which do the same thing.
+	 * 
+	 * @param labels Labels of axis to combine.
+	 * @return A value between -1 and 1, inclusive.
+	 */
 	public int getCombinedAxis(int[] labels) {
 		int result = 0;
 

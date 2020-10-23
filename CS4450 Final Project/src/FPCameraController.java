@@ -105,32 +105,6 @@ public class FPCameraController {
     }
 
     /***************************************************************
-    * method: walkBackwards
-    * purpose: moves the camera backward relative to its current rotation
-    *   (yaw)
-    *
-    ****************************************************************/
-    public void walkBackwards(float distance) {
-        float xOffset = distance * (float) Math.sin(Math.toRadians(yaw));
-        float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
-        position.x += xOffset;
-        position.z -= zOffset;
-    }
-
-    /***************************************************************
-    * method: strafeLeft
-    * purpose: strafes the camera left relative to its current rotation
-    *   (yaw)
-    *
-    ****************************************************************/ 
-    public void strafeLeft(float distance) {
-        float xOffset = distance * (float) Math.sin(Math.toRadians(yaw - 90));
-        float zOffset = distance * (float) Math.cos(Math.toRadians(yaw - 90));
-        position.x -= xOffset;
-        position.z += zOffset;
-    }
-
-    /***************************************************************
     * method: strafeRight
     * purpose: strafes the camera right relative to its current rotation
     *   (yaw)
@@ -150,15 +124,6 @@ public class FPCameraController {
     ****************************************************************/ 
     public void moveUp(float distance) {
         position.y -= distance;
-    }
-
-    /***************************************************************
-    * method: moveDown
-    * purpose: moves the camera down
-    *
-    ****************************************************************/ 
-    public void moveDown(float distance) {
-        position.y += distance;
     }
 
     /***************************************************************
@@ -224,7 +189,6 @@ public class FPCameraController {
 			camera.walkForward(input.getCombinedAxis(new int[]{FORWARD_AXIS, FORWARD_AXIS_ALT}) * movementSpeed);
 			camera.strafeRight(input.getCombinedAxis(new int[]{STRAFE_AXIS, STRAFE_AXIS_ALT}) * movementSpeed);
 			camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
-            
             
             // set the modelview matrix back to the identity
             glLoadIdentity();
