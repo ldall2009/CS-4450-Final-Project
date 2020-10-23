@@ -24,20 +24,7 @@ public class FPCameraController {
     
     private static final int ESCAPE = Keyboard.KEY_ESCAPE;
 
-	/*
-    private static final int UP = Keyboard.KEY_SPACE;
-    private static final int DOWN = Keyboard.KEY_LSHIFT;
-    
-    private static final int FORWARD = Keyboard.KEY_W;
-    private static final int BACKWARD = Keyboard.KEY_S;
-    private static final int LEFT = Keyboard.KEY_A;
-    private static final int RIGHT = Keyboard.KEY_D;
-    
-    private static final int FORWARD_ARROW = Keyboard.KEY_UP;
-    private static final int BACKWARD_ARROW = Keyboard.KEY_DOWN;
-    private static final int LEFT_ARROW = Keyboard.KEY_LEFT;
-    private static final int RIGHT_ARROW = Keyboard.KEY_RIGHT;
-	*/
+	// See constructor for key bindings
 	private static final int VERTICAL_AXIS = 0;
 
 	private static final int FORWARD_AXIS  = 1;
@@ -77,11 +64,11 @@ public class FPCameraController {
 
 		input = new InputManager();
 		input.addButton(ESCAPE, ESCAPE);
-		input.addAxis(VERTICAL_AXIS, Keyboard.KEY_SPACE, Keyboard.KEY_LSHIFT);
-		input.addAxis(FORWARD_AXIS, Keyboard.KEY_W, Keyboard.KEY_S);
-		input.addAxis(STRAFE_AXIS, Keyboard.KEY_D, Keyboard.KEY_A);
-		input.addAxis(FORWARD_AXIS_ALT, Keyboard.KEY_UP, Keyboard.KEY_DOWN);
-		input.addAxis(STRAFE_AXIS_ALT, Keyboard.KEY_RIGHT, Keyboard.KEY_LEFT);
+		input.addAxis(VERTICAL_AXIS,    Keyboard.KEY_SPACE, Keyboard.KEY_LSHIFT);
+		input.addAxis(FORWARD_AXIS,     Keyboard.KEY_W,     Keyboard.KEY_S);
+		input.addAxis(STRAFE_AXIS,      Keyboard.KEY_D,     Keyboard.KEY_A);
+		input.addAxis(FORWARD_AXIS_ALT, Keyboard.KEY_UP,    Keyboard.KEY_DOWN);
+		input.addAxis(STRAFE_AXIS_ALT,  Keyboard.KEY_RIGHT, Keyboard.KEY_LEFT);
     }
 
     /***************************************************************
@@ -234,13 +221,8 @@ public class FPCameraController {
             // we times the movementSpeed with dt this is a time scale
             // so if its a slow frame u move more then a fast frame
             // so on a slow computer you move just as fast as on a fast computer
-			int forwardAxis = input.getAxis(FORWARD_AXIS) + input.getAxis(FORWARD_AXIS_ALT);
-			forwardAxis = Math.max(-1, Math.min(forwardAxis, 1));
-			camera.walkForward(forwardAxis * movementSpeed);
-
-			int strafeAxis = input.getAxis(STRAFE_AXIS) + input.getAxis(STRAFE_AXIS_ALT);
-			strafeAxis = Math.max(-1, Math.min(strafeAxis, 1));
-			camera.strafeRight(strafeAxis * movementSpeed);
+			camera.walkForward(input.getCombinedAxis(new int[]{FORWARD_AXIS, FORWARD_AXIS_ALT}) * movementSpeed);
+			camera.strafeRight(input.getCombinedAxis(new int[]{STRAFE_AXIS, STRAFE_AXIS_ALT}) * movementSpeed);
 			camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
             
             

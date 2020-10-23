@@ -15,15 +15,12 @@
 package Input;
 
 import java.util.HashMap;
-import org.lwjgl.input.Keyboard;
 
 /**
  * Processes input, allowing for checking when something just gets pressed,
  * held, and depressed.
  * 
  * For this to work correctly, the update method must be called every frame.
- * 
- * Not really needed for this assignment, but I know I'll need it later.
  */
 public class InputManager {
 
@@ -41,6 +38,11 @@ public class InputManager {
 		axisList = new HashMap<>();
 	}
 
+	/**
+	 * Adds a new button which the InputManager will watch on future updates.
+	 * @param label Reference to the button.
+	 * @param key Key mapped to button.
+	 */
 	public void addButton(Integer label, Integer key) {
 		watchList.put(label, new KeyInfo(key));
 	}
@@ -116,4 +118,15 @@ public class InputManager {
 
 		return result;		
 	}
+
+	public int getCombinedAxis(int[] labels) {
+		int result = 0;
+
+		for(int label : labels) {
+			result += getAxis(label);
+		}
+		
+		return Math.max(-1, Math.min(result, 1));
+	}
+
 }
