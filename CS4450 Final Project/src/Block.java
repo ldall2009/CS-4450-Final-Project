@@ -27,4 +27,26 @@ public class Block {
         }
     }
     
+    public Block(BlockType type){
+        this.type = type;
+    }
+    
+    public void setCoordinates(float x, float y, float z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
+    public boolean getActive(){
+        return isActive;
+    }
+    
+    public void setActive(boolean active){
+        isActive = active;
+    }
+    
+    public int getID(){
+        return type.getID();
+    }
+    
 }
