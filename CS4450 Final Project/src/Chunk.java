@@ -81,78 +81,111 @@ public class Chunk {
         return cubeColors;
     }
     
-	public static float[] createTexCube(float x, float y, Block block) {
+	private static float[] createTexUV(int u, int v, int rot) {
 		float offset = (1024f/16)/1024f;
 
-		float[] defaultTexture = new float[] {
-				// BOTTOM QUAD(DOWN=+Y)
-				x + offset*3, y + offset*10,
-				x + offset*2, y + offset*10,
-				x + offset*2, y + offset*9,
-				x + offset*3, y + offset*9,
-				// TOP!
-				x + offset*3, y + offset*1,
-				x + offset*2, y + offset*1,
-				x + offset*2, y + offset*0,
-				x + offset*3, y + offset*0,
-				// FRONT QUAD
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1,
-				// BACK QUAD
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1,
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				// LEFT QUAD
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1,
-				// RIGHT QUAD
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1
-			};
+		switch(rot) {
+			case 0: return new float[] {
+					offset*(u+1), offset*(v+1),
+					offset*(u), offset*(v+1),
+					offset*(u), offset*(v),
+					offset*(u+1), offset*(v),
+				};
+			case 1: return new float[] {
+					offset*(u), offset*(v+1),
+					offset*(u), offset*(v),
+					offset*(u+1), offset*(v),
+					offset*(u+1), offset*(v+1),
+				};
+			case 2: return new float[] {
+					offset*(u), offset*(v),
+					offset*(u+1), offset*(v),
+					offset*(u+1), offset*(v+1),
+					offset*(u), offset*(v+1),
+				};
+			case 3: return new float[] {
+					offset*(u+1), offset*(v),
+					offset*(u+1), offset*(v+1),
+					offset*(u), offset*(v+1),
+					offset*(u), offset*(v),
+				};
+			default:
+				return new float[]{};
+		}
+	}
+	public static float[] createTexCube(float x, float y, Block block) {
+		final int VERTEX_COUNT = 4*2;
 		
-		switch (block.getID()) {
-			case 1:return new float[] {
-				// BOTTOM QUAD(DOWN=+Y)
-				x + offset*3, y + offset*10,
-				x + offset*2, y + offset*10,
-				x + offset*2, y + offset*9,
-				x + offset*3, y + offset*9,
-				// TOP!
-				x + offset*3, y + offset*1,
-				x + offset*2, y + offset*1,
-				x + offset*2, y + offset*0,
-				x + offset*3, y + offset*0,
-				// FRONT QUAD
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1,
-				// BACK QUAD
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1,
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				// LEFT QUAD
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1,
-				// RIGHT QUAD
-				x + offset*3, y + offset*0,
-				x + offset*4, y + offset*0,
-				x + offset*4, y + offset*1,
-				x + offset*3, y + offset*1
-			};
+		//float offset = (1024f/16)/1024f;
+
+		float[][] faces;
+
+		switch (block.getType()) {
+			case Dirt:
+				faces = new float[][] {
+					createTexUV(2, 0, 0), // Top
+					createTexUV(2, 0, 0), // Bottom
+					createTexUV(2, 0, 2), // Front
+					createTexUV(2, 0, 0), // Back
+					createTexUV(2, 0, 2), // Left
+					createTexUV(2, 0, 0), // Right
+				};
+				break;
+			case Grass:
+				faces = new float[][] {
+					createTexUV(2, 9, 0), // Top
+					createTexUV(2, 0, 0), // Bottom
+					createTexUV(3, 0, 2), // Front
+					createTexUV(3, 0, 0), // Back
+					createTexUV(3, 0, 2), // Left
+					createTexUV(3, 0, 0), // Right
+				};
+				break;
+			case Water:
+				faces = new float[][] {
+					createTexUV(1, 11, 0), // Top
+					createTexUV(1, 11, 0), // Bottom
+					createTexUV(1, 11, 2), // Front
+					createTexUV(1, 11, 0), // Back
+					createTexUV(1, 11, 2), // Left
+					createTexUV(1, 11, 0), // Right
+				};
+				break;
+			case Stone:
+				faces = new float[][] {
+					createTexUV(1, 0, 0), // Top
+					createTexUV(1, 0, 0), // Bottom
+					createTexUV(1, 0, 2), // Front
+					createTexUV(1, 0, 0), // Back
+					createTexUV(1, 0, 2), // Left
+					createTexUV(1, 0, 0), // Right
+				};
+				break;
+			default:
+				faces = new float[][] {
+					createTexUV(2, 9, 0), // Top
+					createTexUV(2, 0, 0), // Bottom
+					createTexUV(3, 0, 2), // Front
+					createTexUV(3, 0, 0), // Back
+					createTexUV(3, 0, 2), // Left
+					createTexUV(3, 0, 0), // Right
+				};
+				break;
 		}
 
-		return defaultTexture;
+		float[] texture = new float[faces.length*VERTEX_COUNT];
+
+		for(int i=0; i<faces.length; ++i)
+			for(int j=0; j<VERTEX_COUNT; ++j) {
+				// Even face indices (0, 2) are for x
+				// Odd face indices (1, 3) are for y
+				if(j%2==0)
+					texture[i*VERTEX_COUNT + j] = faces[i][j]+x;
+				else
+					texture[i*VERTEX_COUNT + j] = faces[i][j]+y;
+			}
+
+		return texture;
 	}
 	
     public static float[] createCube(float x, float y, float z){
