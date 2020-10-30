@@ -17,8 +17,11 @@ public class Chunk {
     private int startX, startY, startZ;
     private Random r;
 
-	private int VBOTextureHandle;
-	private Texture texture;
+    private int VBOTextureHandle;
+    private Texture texture;
+    
+    private double height;
+    private int scale;
     
     public void render(){
         glPushMatrix();
