@@ -48,6 +48,8 @@ public class FPCameraController {
     
     private Vector3Float me;
 
+	private Chunk chunk;
+
     /***************************************************************
     * method: FPCameraController
     * purpose: constructor used to instantiate the position Vector3f.
@@ -61,6 +63,8 @@ public class FPCameraController {
         lookPosition.x = 0f;
         lookPosition.y = 15f;
         lookPosition.z = 0f;
+
+		chunk = new Chunk((int)x, (int)y, (int)z);
     }
 
     /***************************************************************
@@ -187,6 +191,8 @@ public class FPCameraController {
         // hide the mouse
         Mouse.setGrabbed(true);
 
+		chunk.rebuildMesh();
+
         // keep looping till the display window is closed the ESC key is down
         while (!Display.isCloseRequested() && !Keyboard.isKeyDown(ESCAPE)) {
             time = Sys.getTime();
@@ -246,7 +252,8 @@ public class FPCameraController {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             // you would draw your scene here.
-            render();
+			chunk.render();
+            //render();
             
             // draw the buffer to the screen
             Display.update();
@@ -315,6 +322,7 @@ public class FPCameraController {
             glVertex3f(-1.0f, 1.0f, -3.0f);
             glVertex3f(1.0f, 1.0f, -3.0f);
             glEnd();
+
             
         } catch (Exception e) { }
     }

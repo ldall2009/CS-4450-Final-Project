@@ -22,6 +22,10 @@ public class Chunk {
             glDrawArrays(GL_QUADS, 0, CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE*24);
         glPopMatrix();
     }
+
+	public void rebuildMesh() {
+        rebuildMesh(startX,startY,startZ);
+	}
     
     public void rebuildMesh(float startX, float startY, float startZ){
         VBOColorHandle = glGenBuffers();
@@ -120,12 +124,9 @@ public class Chunk {
                 }
             }
         }
-        VBOColorHandle = glGenBuffers();
-        VBOVertexHandle = glGenBuffers();
         this.startX = startX;
         this.startY = startY;
         this.startZ = startZ;
-        rebuildMesh(startX,startY,startZ);
     } 
     
 }
