@@ -3,7 +3,7 @@ import java.util.Random;
 public class SimplexNoise {
 
     SimplexNoise_octave[] octaves;
-    double[] frequencys;
+    double[] frequencies;
     double[] amplitudes;
 
     int largestFeature;
@@ -19,7 +19,7 @@ public class SimplexNoise {
         int numberOfOctaves=(int)Math.ceil(Math.log10(largestFeature)/Math.log10(2));
 
         octaves=new SimplexNoise_octave[numberOfOctaves];
-        frequencys=new double[numberOfOctaves];
+        frequencies=new double[numberOfOctaves];
         amplitudes=new double[numberOfOctaves];
 
         Random rnd=new Random(seed);
@@ -27,7 +27,7 @@ public class SimplexNoise {
         for(int i=0;i<numberOfOctaves;i++){
             octaves[i]=new SimplexNoise_octave(rnd.nextInt());
 
-            frequencys[i] = Math.pow(2,i);
+            frequencies[i] = Math.pow(2,i);
             amplitudes[i] = Math.pow(persistence,octaves.length-i);
 
 
@@ -46,7 +46,7 @@ public class SimplexNoise {
           //double frequency = Math.pow(2,i);
           //double amplitude = Math.pow(persistence,octaves.length-i);
 
-          result=result+octaves[i].noise(x/frequencys[i], y/frequencys[i])* amplitudes[i];
+          result=result+octaves[i].noise(x/frequencies[i], y/frequencies[i])* amplitudes[i];
         }
 
 
