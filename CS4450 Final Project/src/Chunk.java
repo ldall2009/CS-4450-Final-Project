@@ -33,7 +33,11 @@ public class Chunk {
     private double[][] heights;
     private int scale;
     
-    
+    /***************************************************************
+    * method: Chunk
+    * purpose: sets up constructor with textures and start coords
+    *
+    ****************************************************************/
     public Chunk(int startX, int startY, int startZ){
 	try{
             texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("terrain.png"));
@@ -64,6 +68,11 @@ public class Chunk {
         this.startZ = startZ;
     } 
     
+    /***************************************************************
+    * method: render
+    * purpose: sets up respective push and pop matrix to render chunks
+    *
+    ****************************************************************/
     public void render(){
         glPushMatrix();
         glBindBuffer(GL_ARRAY_BUFFER, VBOVertexHandle);
@@ -77,10 +86,20 @@ public class Chunk {
         glPopMatrix();
     }
 
+    /***************************************************************
+    * method: rebuildMesh (not overloaded)
+    * purpose: calls the other rebuildMesh method
+    *
+    ****************************************************************/
     public void rebuildMesh() {
         rebuildMesh(startX,startY,startZ);
     }
     
+    /***************************************************************
+    * method: rebuildMesh
+    * purpose: sets up build every time a respective chunk should refresh
+    *
+    ****************************************************************/
     public void rebuildMesh(float startX, float startY, float startZ){
         
         SimplexNoise noise = new SimplexNoise(30, 0.1, r.nextInt());
@@ -125,6 +144,11 @@ public class Chunk {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     
+    /***************************************************************
+    * method: createCubeVertexCol
+    * purpose: sets up cubeColors array and initializes its values
+    * then returns it
+    ****************************************************************/
     private float[] createCubeVertexCol(float[] CubeColorArray){
         float[] cubeColors = new float[CubeColorArray.length*4*6];
         for(int i=0; i<cubeColors.length; i++){
@@ -133,38 +157,53 @@ public class Chunk {
         return cubeColors;
     }
     
-	private static float[] createTexUV(int u, int v, int rot) {
-		float offset = (1024f/16)/1024f;
+    /***************************************************************
+    * method: createTexUV
+    * purpose: sets up uv texturing so that terrain.png is enough
+    * to have all textures
+    ****************************************************************/
+    private static float[] createTexUV(int u, int v, int rot) {
+	float offset = (1024f/16)/1024f;
 
-		switch(rot) {
-			case 0: return new float[] {
-					offset*(u+1), offset*(v+1),
-					offset*(u), offset*(v+1),
-					offset*(u), offset*(v),
-					offset*(u+1), offset*(v),
-				};
-			case 1: return new float[] {
-					offset*(u), offset*(v+1),
-					offset*(u), offset*(v),
-					offset*(u+1), offset*(v),
-					offset*(u+1), offset*(v+1),
-				};
-			case 2: return new float[] {
-					offset*(u), offset*(v),
-					offset*(u+1), offset*(v),
-					offset*(u+1), offset*(v+1),
-					offset*(u), offset*(v+1),
-				};
-			case 3: return new float[] {
-					offset*(u+1), offset*(v),
-					offset*(u+1), offset*(v+1),
-					offset*(u), offset*(v+1),
-					offset*(u), offset*(v),
-				};
-			default:
-				return new float[]{};
-		}
-	}
+	switch(rot) {
+            case 0: 
+                return new float[] {
+                    offset*(u+1), offset*(v+1),
+                    offset*(u), offset*(v+1),
+                    offset*(u), offset*(v),
+                    offset*(u+1), offset*(v),
+		};
+            case 1: 
+                return new float[] {
+                    offset*(u), offset*(v+1),
+		    offset*(u), offset*(v),
+		    offset*(u+1), offset*(v),
+		    offset*(u+1), offset*(v+1),
+		};
+            case 2: 
+                return new float[] {
+                    offset*(u), offset*(v),
+                    offset*(u+1), offset*(v),
+                    offset*(u+1), offset*(v+1),
+                    offset*(u), offset*(v+1),
+                };
+            case 3: 
+                return new float[] {
+                    offset*(u+1), offset*(v),
+                    offset*(u+1), offset*(v+1),
+                    offset*(u), offset*(v+1),
+                    offset*(u), offset*(v),
+		};
+            default:
+               	return new float[]{};
+        }
+    }
+    
+    /***************************************************************
+    * method: createTexCube
+    * purpose: generates the coordinates of the textures to the cubes
+    *
+    ****************************************************************/
     public static float[] createTexCube(float x, float y, Block block) {
         final int VERTEX_COUNT = 4*2;
 
@@ -239,7 +278,12 @@ public class Chunk {
 
         return texture;
     }
-	
+    
+    /***************************************************************
+    * method: createCube
+    * purpose: generates the coordinates of the quads to render for
+    * cube chunks
+    ****************************************************************/
     public static float[] createCube(float x, float y, float z){
         int offset = CUBE_LENGTH/2;
         return new float[] {
@@ -276,6 +320,11 @@ public class Chunk {
         };
     }
     
+    /***************************************************************
+    * method: getCubeColor
+    * purpose: sets up method to getCubeColor so that it is visible
+    *
+    ****************************************************************/
     private float[] getCubeColor(Block block){
         return new float[]{1,1,1};
     }
