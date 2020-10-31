@@ -1,3 +1,15 @@
+/***************************************************************
+* file: Chunk.java
+* author: N. Vinjamury, D. Edwards, L. Dall
+* class: CS 4450 - Computer Graphics
+*
+* assignment: Semester Project - Checkpoint 2
+* date last modified: 10/30/2020
+*
+* purpose: This program generates chunks of blocks that can be rendered at once 
+*   using textures and simplex noises along with blocks and coordinates to
+*   to create them
+****************************************************************/ 
 import java.nio.FloatBuffer;
 import java.util.Random;
 import org.lwjgl.BufferUtils;
