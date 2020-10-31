@@ -9,7 +9,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class Chunk {
-    public static final int CHUNK_SIZE = 50;
+    public static final int CHUNK_SIZE = 30;
     public static final int CUBE_LENGTH = 2;
     private Block[][][] blocks;
     private int VBOVertexHandle;
@@ -76,7 +76,7 @@ public class Chunk {
         scale = 1;
         for(int x = 0; x < CHUNK_SIZE; x++){
             for(int z = 0; z < CHUNK_SIZE; z++){
-                heights[x][z] = (double)(15 + startY + (int)(60*noise.getNoise(x,z)) * CUBE_LENGTH);
+                heights[x][z] = (double)(15 + startY + (int)(40*noise.getNoise(x,z)) * CUBE_LENGTH);
             }
         }
         
@@ -161,7 +161,7 @@ public class Chunk {
         float[][] faces;
 
         switch (block.getType()) {
-            case Dirt:
+            /*case Dirt:
                 faces = new float[][] {
                     createTexUV(2, 0, 0), // Top
                     createTexUV(2, 0, 0), // Bottom
@@ -170,7 +170,7 @@ public class Chunk {
                     createTexUV(2, 0, 2), // Left
                     createTexUV(2, 0, 0), // Right
                 };
-                break;
+                break;*/
             case Grass:
                 faces = new float[][] {
                     createTexUV(2, 9, 0), // Top
@@ -181,7 +181,7 @@ public class Chunk {
                     createTexUV(3, 0, 0), // Right
                 };
                 break;
-            case Water:
+            /*case Water:
                 faces = new float[][] {
                     createTexUV(1, 11, 0), // Top
                     createTexUV(1, 11, 0), // Bottom
@@ -200,7 +200,7 @@ public class Chunk {
                     createTexUV(1, 0, 2), // Left
                     createTexUV(1, 0, 0), // Right
                 };
-                break;
+                break;*/
             default:
                 faces = new float[][] {
                     createTexUV(2, 9, 0), // Top

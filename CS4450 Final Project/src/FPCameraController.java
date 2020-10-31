@@ -64,7 +64,7 @@ public class FPCameraController {
         lookPosition.y = 15f;
         lookPosition.z = 0f;
 
-		chunk = new Chunk((int)x, (int)y, (int)z);
+	chunk = new Chunk((int)x, (int)y, (int)z);
     }
 
     /***************************************************************
@@ -180,7 +180,7 @@ public class FPCameraController {
     *
     ****************************************************************/ 
     public void gameLoop() {
-        FPCameraController camera = new FPCameraController(0, 0, 0);
+        FPCameraController camera = new FPCameraController(-30, -70, -30);
         float dx = 0.0f;
         float dy = 0.0f;
         float dt = 0.0f; // length of frame
