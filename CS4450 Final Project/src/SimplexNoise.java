@@ -1,46 +1,72 @@
-
 import java.util.Random;
-
 
 public class SimplexNoise {
 
-    //won't work yet because we may need an octave object for input coordinates
-    double[] octaves;
-    double[] frequencies;
+    SimplexNoise_octave[] octaves;
+    double[] frequencys;
     double[] amplitudes;
-    private int largestFeature;
-    private double persistence;
-    private int seed;
-    private Random r;
-    
-    public SimplexNoise(int largestFeature, double persistence, int seed){
-        this.largestFeature = largestFeature;
-        
-        octaves = new double[largestFeature];
-        frequencies = new double[largestFeature];
-        amplitudes = new double[largestFeature];
-        
-        this.persistence = persistence;
-        this.seed = seed;
-        
-        r = new Random(seed);
-        
-        for(int i = 0; i < largestFeature; i++){
-            //initialize the octaves, frequencies, and amplitudes here
-            //use r.nextInt()
-            //amplitude is based on persistence
-            //
+
+    int largestFeature;
+    double persistence;
+    int seed;
+
+    public SimplexNoise(int largestFeature,double persistence, int seed){
+        this.largestFeature=largestFeature;
+        this.persistence=persistence;
+        this.seed=seed;
+
+        //recieves a number (eg 128) and calculates what power of 2 it is (eg 2^7)
+        int numberOfOctaves=(int)Math.ceil(Math.log10(largestFeature)/Math.log10(2));
+
+        octaves=new SimplexNoise_octave[numberOfOctaves];
+        frequencys=new double[numberOfOctaves];
+        amplitudes=new double[numberOfOctaves];
+
+        Random rnd=new Random(seed);
+
+        for(int i=0;i<numberOfOctaves;i++){
+            octaves[i]=new SimplexNoise_octave(rnd.nextInt());
+
+            frequencys[i] = Math.pow(2,i);
+            amplitudes[i] = Math.pow(persistence,octaves.length-i);
+
+
+
+
         }
-    }
-    
-    public double getNoise(int x, int y){
-        double noiseValue = 0;
-        for(int i=0; i < octaves.length; i++){ 
-            //must work with x and y for each octave
-            noiseValue += octaves[i]/frequencies[i]*amplitudes[i];
-        }
-        
-        return noiseValue;
+
     }
 
-}
+
+    public double getNoise(int x, int y){
+
+        double result=0;
+
+        for(int i=0;i<octaves.length;i++){
+          //double frequency = Math.pow(2,i);
+          //double amplitude = Math.pow(persistence,octaves.length-i);
+
+          result=result+octaves[i].noise(x/frequencys[i], y/frequencys[i])* amplitudes[i];
+        }
+
+
+        return result;
+
+    }
+
+    public double getNoise(int x,int y, int z){
+
+        double result=0;
+
+        for(int i=0;i<octaves.length;i++){
+          double frequency = Math.pow(2,i);
+          double amplitude = Math.pow(persistence,octaves.length-i);
+
+          result=result+octaves[i].noise(x/frequency, y/frequency,z/frequency)* amplitude;
+        }
+
+
+        return result;
+
+    }
+} 
