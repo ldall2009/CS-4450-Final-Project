@@ -9,27 +9,26 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class Chunk {
-    public static final int CHUNK_SIZE = 30;
+    public static final int CHUNK_SIZE = 50;
     public static final int CUBE_LENGTH = 2;
     private Block[][][] blocks;
     private int VBOVertexHandle;
     private int VBOColorHandle;
     private int startX, startY, startZ;
     private Random r;
-
     private int VBOTextureHandle;
     private Texture texture;
-    
     private double[][] heights;
     private int scale;
     
+    
     public Chunk(int startX, int startY, int startZ){
-		try{
-			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("terrain.png"));
-		}
-		catch(Exception e) {
-			System.out.print("Error!");
-		}
+	try{
+            texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("terrain.png"));
+	}
+	catch(Exception e) {
+            System.out.print("Error!");
+	}
 		
         r = new Random();
         blocks = new Block[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
@@ -72,12 +71,12 @@ public class Chunk {
     
     public void rebuildMesh(float startX, float startY, float startZ){
         
-        SimplexNoise noise = new SimplexNoise(100, 0.3, r.nextInt());
+        SimplexNoise noise = new SimplexNoise(30, 0.1, r.nextInt());
         heights = new double[CHUNK_SIZE][CHUNK_SIZE];
         scale = 1;
         for(int x = 0; x < CHUNK_SIZE; x++){
             for(int z = 0; z < CHUNK_SIZE; z++){
-                heights[x][z] = (double)(startY + (int)(100*noise.getNoise(x,z)) * CUBE_LENGTH);
+                heights[x][z] = (double)(startY + (int)(60*noise.getNoise(x,z)) * CUBE_LENGTH);
             }
         }
         
@@ -109,9 +108,9 @@ public class Chunk {
         glBufferData(GL_ARRAY_BUFFER, VertexColorData, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, VBOTextureHandle);
-		glBufferData(GL_ARRAY_BUFFER, VertexTextureData,GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, VBOTextureHandle);
+	glBufferData(GL_ARRAY_BUFFER, VertexTextureData,GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     
     private float[] createCubeVertexCol(float[] CubeColorArray){
