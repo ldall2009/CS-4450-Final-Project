@@ -76,7 +76,7 @@ public class Chunk {
         scale = 1;
         for(int x = 0; x < CHUNK_SIZE; x++){
             for(int z = 0; z < CHUNK_SIZE; z++){
-                heights[x][z] = (double)(startY + (int)(60*noise.getNoise(x,z)) * CUBE_LENGTH);
+                heights[x][z] = (double)(15 + startY + (int)(60*noise.getNoise(x,z)) * CUBE_LENGTH);
             }
         }
         
