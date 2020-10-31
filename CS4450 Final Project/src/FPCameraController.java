@@ -3,7 +3,7 @@
 * author: N. Vinjamury, D. Edwards, L. Dall
 * class: CS 4450 - Computer Graphics
 *
-* assignment: Semester Project - Checkpoint 1
+* assignment: Semester Project - Checkpoint 2
 * date last modified: 10/5/2020
 *
 * purpose: This file/class is responsible for allowing the user to move 
