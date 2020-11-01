@@ -3,7 +3,7 @@
 * author: N. Vinjamury, D. Edwards, L. Dall
 * class: CS 4450 - Computer Graphics
 *
-* assignment: Semester Project - Checkpoint 1
+* assignment: Semester Project - Checkpoint 2
 * date last modified: 10/5/2020
 *
 * purpose: This file/class is responsible for allowing the user to move 
@@ -48,6 +48,8 @@ public class FPCameraController {
     
     private Vector3Float me;
 
+	private Chunk chunk;
+
     /***************************************************************
     * method: FPCameraController
     * purpose: constructor used to instantiate the position Vector3f.
@@ -69,6 +71,8 @@ public class FPCameraController {
 		input.addAxis(STRAFE_AXIS,      Keyboard.KEY_D,     Keyboard.KEY_A);
 		input.addAxis(FORWARD_AXIS_ALT, Keyboard.KEY_UP,    Keyboard.KEY_DOWN);
 		input.addAxis(STRAFE_AXIS_ALT,  Keyboard.KEY_RIGHT, Keyboard.KEY_LEFT);
+
+		chunk = new Chunk((int)x, (int)y, (int)z);
     }
 
     /***************************************************************
@@ -149,7 +153,7 @@ public class FPCameraController {
     *
     ****************************************************************/ 
     public void gameLoop() {
-        FPCameraController camera = new FPCameraController(0, 0, 0);
+        FPCameraController camera = new FPCameraController(-30, -70, -30);
         float dx = 0.0f;
         float dy = 0.0f;
         float dt = 0.0f; // length of frame
@@ -161,6 +165,8 @@ public class FPCameraController {
         Mouse.setGrabbed(true);
 
 		input.update();
+		chunk.rebuildMesh();
+
         // keep looping till the display window is closed the ESC key is down
         //while (!Display.isCloseRequested() && !Keyboard.isKeyDown(ESCAPE)) {
         while (!Display.isCloseRequested() && !input.isDown(ESCAPE)) {
@@ -198,7 +204,8 @@ public class FPCameraController {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             // you would draw your scene here.
-            render();
+			chunk.render();
+            //render();
             
             // draw the buffer to the screen
             Display.update();
@@ -267,6 +274,7 @@ public class FPCameraController {
             glVertex3f(-1.0f, 1.0f, -3.0f);
             glVertex3f(1.0f, 1.0f, -3.0f);
             glEnd();
+
             
         } catch (Exception e) { }
     }

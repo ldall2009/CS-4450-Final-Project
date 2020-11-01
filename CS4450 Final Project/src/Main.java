@@ -3,11 +3,11 @@
 * author: N. Vinjamury, D. Edwards, L. Dall
 * class: CS 4450 - Computer Graphics
 *
-* assignment: Semester Project - Checkpoint 1
-* date last modified: 10/5/2020
+* assignment: Semester Project - Checkpoint 2
+* date last modified: 10/30/2020
 *
-* purpose: This program renders a 3D cube that a player can investigate by 
-*   using the mouse to control the camera, and by using keys on the keyboard
+* purpose: This program renders a 3D environment that a player can investigate 
+*   by using the mouse to control the camera, and by using keys on the keyboard
 *   to move around.  This class sets up LWJGL properties as well as starting the
 *   game loop.
 *
@@ -74,6 +74,12 @@ public class Main {
         GLU.gluPerspective(100.0f, (float) displayMode.getWidth() / (float) displayMode.getHeight(), 0.1f, 300.0f);
         glMatrixMode(GL_MODELVIEW);
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     }
 
     /***************************************************************

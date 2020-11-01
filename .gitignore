@@ -21,4 +21,5 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/CS4450 Final Project/build/
+CS4450 Final Project/build/
+CS4450 Final Project/nbproject/private/private.xml
