@@ -19,12 +19,15 @@ import org.lwjgl.opengl.Display;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.Sys;
 import Input.*;
+import java.nio.FloatBuffer;
+import org.lwjgl.BufferUtils;
 
 public class FPCameraController {
     
     // 3d vector to store the camera's position in
     private Vector3f position = null;
     private Vector3f lookPosition = null;
+	private Vector3f lPosition = null;
     
     // the rotation around the Y axis of the camera
     private float yaw = 0.0f;
@@ -46,6 +49,7 @@ public class FPCameraController {
     public FPCameraController(float x, float y, float z) {
         position = new Vector3f(x, y, z);
         lookPosition = new Vector3f(x, y, z);
+		lPosition = new Vector3f(x, y, z);
         lookPosition.x = 0f;
         lookPosition.y = 15f;
         lookPosition.z = 0f;
@@ -82,6 +86,12 @@ public class FPCameraController {
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
         position.x -= xOffset;
         position.z += zOffset;
+
+		/*
+		FloatBuffer lightPosition= BufferUtils.createFloatBuffer(4);
+		lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
+		glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+		*/
     }
 
     /***************************************************************
@@ -95,6 +105,12 @@ public class FPCameraController {
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw + 90));
         position.x -= xOffset;
         position.z += zOffset;
+
+		/*
+		FloatBuffer lightPosition= BufferUtils.createFloatBuffer(4);
+		lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
+		glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+		*/
     }
 
     /***************************************************************
@@ -119,6 +135,13 @@ public class FPCameraController {
         glRotatef(yaw, 0.0f, 1.0f, 0.0f);
         // translate to the position vector's location
         glTranslatef(position.x, position.y, position.z);
+
+		/*
+		FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+		lightPosition
+			.put(lPosition.x).put(lPosition.y).put(lPosition.z).put(1.0f).flip();
+		glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+*/
     }
 
 
