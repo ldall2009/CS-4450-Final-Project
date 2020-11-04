@@ -89,9 +89,6 @@ public class Main {
         glEnableClientState(GL_COLOR_ARRAY);
         glEnable(GL_DEPTH_TEST);
 
-		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
 		initLightArrays();
 		glLight(GL_LIGHT0, GL_POSITION, lightPosition);
 		glLight(GL_LIGHT0, GL_SPECULAR, whiteLight);
@@ -100,6 +97,9 @@ public class Main {
 
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
+
+		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     }
 
 	private void initLightArrays() {
