@@ -1,8 +1,16 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+/***************************************************************
+* file: FPCameraController.java
+* author: N. Vinjamury, D. Edwards, L. Dall
+* class: CS 4450 - Computer Graphics
+*
+* assignment: Semester Project - Checkpoint 2
+* date last modified: 11/14/2020
+*
+* purpose: This class is responsible for updating the game
+* in real time, checking for inputs and passing it along to the
+* relevant objects.
+*
+****************************************************************/ 
 
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.input.Keyboard;
@@ -12,9 +20,6 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.Sys;
 import Input.InputManager;
 
-/**
- *
- */
 public class GameManager {
 	
 	private static final Vector3f CHUNK_POSITION = new Vector3f(0,0,0);
@@ -94,11 +99,13 @@ public class GameManager {
 			// we times the movementSpeed with dt this is a time scale
 			// so if its a slow frame u move more then a fast frame
 			// so on a slow computer you move just as fast as on a fast computer
-			camera.walkForward(input.getCombinedAxis(
-				new int[]{FORWARD_AXIS, FORWARD_AXIS_ALT}) * movementSpeed
+			camera.walkForward(
+				input.getCombinedAxis(new int[]{FORWARD_AXIS, FORWARD_AXIS_ALT})
+				* movementSpeed
 			);
 			camera.strafeRight(
-				input.getCombinedAxis(new int[]{STRAFE_AXIS, STRAFE_AXIS_ALT}) * movementSpeed
+				input.getCombinedAxis(new int[]{STRAFE_AXIS, STRAFE_AXIS_ALT})
+				* movementSpeed
 			);
 			camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
 			

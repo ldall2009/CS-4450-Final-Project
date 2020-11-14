@@ -41,7 +41,7 @@ public class Main {
         try {
             createWindow();
             initGL();
-            //fp.gameLoop();// render();
+
 			gm = new GameManager();
 			gm.gameLoop();
         } catch (Exception e) {
