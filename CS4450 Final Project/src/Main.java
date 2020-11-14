@@ -28,7 +28,8 @@ public class Main {
     private static final int SCREEN_WIDTH = 640;
     private static final int SCREEN_HEIGHT = 480;
     
-    private FPCameraController fp = new FPCameraController(0f, 0f, 0f);
+    //private FPCameraController fp = new FPCameraController(0f, 0f, 0f);
+	private GameManager gm;
     private DisplayMode displayMode;
 
     /***************************************************************
@@ -40,7 +41,9 @@ public class Main {
         try {
             createWindow();
             initGL();
-            fp.gameLoop();// render();
+            //fp.gameLoop();// render();
+			gm = new GameManager();
+			gm.gameLoop();
         } catch (Exception e) {
             e.printStackTrace();
         }
