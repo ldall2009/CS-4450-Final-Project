@@ -76,8 +76,6 @@ public class FPCameraController {
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
         position.x -= xOffset;
         position.z += zOffset;
-        
-        updateLightSource(xOffset, zOffset);
     }
 
     /***************************************************************
@@ -91,8 +89,6 @@ public class FPCameraController {
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
         position.x += xOffset;
         position.z -= zOffset;
-        
-        updateLightSource(xOffset, zOffset);
     }
 
     /***************************************************************
@@ -106,8 +102,6 @@ public class FPCameraController {
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw - 90));
         position.x -= xOffset;
         position.z += zOffset;
-        
-        updateLightSource(xOffset, zOffset);
     }
 
     /***************************************************************
@@ -121,20 +115,6 @@ public class FPCameraController {
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw + 90));
         position.x -= xOffset;
         position.z += zOffset;
-        
-        updateLightSource(xOffset, zOffset);
-    }
-    
-    /***************************************************************
-    * method: updateLightSource
-    * purpose: updates the light source after the player has moved
-    *
-    ****************************************************************/
-    public void updateLightSource(float xOffset, float zOffset){
-        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lookPosition.x -= xOffset).put(
-                lookPosition.y).put(lookPosition.z += zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
     /***************************************************************
@@ -168,11 +148,6 @@ public class FPCameraController {
         glRotatef(yaw, 0.0f, 1.0f, 0.0f);
         // translate to the position vector's location
         glTranslatef(position.x, position.y, position.z);
-
-        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lookPosition.x).put(
-                lookPosition.y).put(lookPosition.z).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
 }

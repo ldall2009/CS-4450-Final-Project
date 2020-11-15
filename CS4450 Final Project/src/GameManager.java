@@ -20,6 +20,9 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.Sys;
 import Input.InputManager;
 
+import org.lwjgl.BufferUtils;
+import java.nio.FloatBuffer;
+
 public class GameManager {
 	
 	private static final Vector3f CHUNK_POSITION = new Vector3f(0,0,0);
@@ -39,6 +42,8 @@ public class GameManager {
 	private InputManager input;
 	private Chunk chunk;
 	private FPCameraController camera;
+
+	FloatBuffer lightPosition;
 	
 	
 	public GameManager() {
@@ -52,6 +57,9 @@ public class GameManager {
 		input.addAxis(STRAFE_AXIS,      Keyboard.KEY_D,     Keyboard.KEY_A);
 		input.addAxis(FORWARD_AXIS_ALT, Keyboard.KEY_UP,    Keyboard.KEY_DOWN);
 		input.addAxis(STRAFE_AXIS_ALT,  Keyboard.KEY_RIGHT, Keyboard.KEY_LEFT);
+
+		lightPosition = BufferUtils.createFloatBuffer(4);
+        lightPosition.put(30).put(70).put(40).put(1.0f).flip();
 	}
 	
 	/***************************************************************
@@ -117,6 +125,7 @@ public class GameManager {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
 			// you would draw your scene here.
+			updateLight();
 			chunk.render();
 			//render();
 			
@@ -125,5 +134,9 @@ public class GameManager {
 			Display.sync(60);
 		}
 		Display.destroy();
+	}
+
+	private void updateLight() {
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
 	}
 }
