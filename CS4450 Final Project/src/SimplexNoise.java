@@ -1,3 +1,15 @@
+/***************************************************************
+* file: SimplexNoise.java
+* author: N. Vinjamury, D. Edwards, L. Dall
+* class: CS 4450 - Computer Graphics
+*
+* assignment: Semester Project - Checkpoint 3
+* date last modified: 11/14/2020
+*
+* purpose: This class generates noise for our given environment
+*
+****************************************************************/ 
+
 import java.util.Random;
 
 public class SimplexNoise {

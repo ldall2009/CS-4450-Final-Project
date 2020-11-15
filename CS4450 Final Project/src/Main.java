@@ -3,8 +3,8 @@
 * author: N. Vinjamury, D. Edwards, L. Dall
 * class: CS 4450 - Computer Graphics
 *
-* assignment: Semester Project - Checkpoint 2
-* date last modified: 10/30/2020
+* assignment: Semester Project - Checkpoint 3
+* date last modified: 11/14/2020
 *
 * purpose: This program renders a 3D environment that a player can investigate 
 *   by using the mouse to control the camera, and by using keys on the keyboard
@@ -97,7 +97,7 @@ public class Main {
     
     /***************************************************************
     * method: initLightArrays
-    * purpose: 
+    * purpose: initializes light arrays for use in opengl's lighting
     * 
     ****************************************************************/ 
     private void initLightArrays() {

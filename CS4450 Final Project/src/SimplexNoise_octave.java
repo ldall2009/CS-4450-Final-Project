@@ -1,3 +1,15 @@
+/***************************************************************
+* file: SimplexNoise_octave.java
+* author: N. Vinjamury, D. Edwards, L. Dall
+* class: CS 4450 - Computer Graphics
+*
+* assignment: Semester Project - Checkpoint 3
+* date last modified: 11/14/2020
+*
+* purpose: This class uses a simplex noise algorithm used in our
+*   project
+*
+****************************************************************/ 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
