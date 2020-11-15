@@ -97,7 +97,7 @@ public class Main {
     
     /***************************************************************
     * method: initLightArrays
-    * purpose: first method called upon application startup
+    * purpose: 
     * 
     ****************************************************************/ 
     private void initLightArrays() {
