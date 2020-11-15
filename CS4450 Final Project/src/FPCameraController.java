@@ -100,8 +100,7 @@ public class FPCameraController {
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
         position.x -= xOffset;
         position.z += zOffset;
-        
-        updateLightSource(xOffset, zOffset);
+
     }
 
     /***************************************************************
@@ -116,7 +115,7 @@ public class FPCameraController {
         position.x += xOffset;
         position.z -= zOffset;
         
-        updateLightSource(xOffset, zOffset);
+
     }
 
     /***************************************************************
@@ -131,7 +130,7 @@ public class FPCameraController {
         position.x -= xOffset;
         position.z += zOffset;
         
-        updateLightSource(xOffset, zOffset);
+
     }
 
     /***************************************************************
@@ -146,19 +145,7 @@ public class FPCameraController {
         position.x -= xOffset;
         position.z += zOffset;
         
-        updateLightSource(xOffset, zOffset);
-    }
-    
-    /***************************************************************
-    * method: updateLightSource
-    * purpose: updates the light source after the player has moved
-    *
-    ****************************************************************/
-    public void updateLightSource(float xOffset, float zOffset){
-        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lookPosition.x -= xOffset).put(
-                lookPosition.y).put(lookPosition.z += zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+
     }
 
     /***************************************************************
@@ -194,8 +181,7 @@ public class FPCameraController {
         glTranslatef(position.x, position.y, position.z);
 
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lookPosition.x).put(
-                lookPosition.y).put(lookPosition.z).put(1.0f).flip();
+        lightPosition.put(30).put(70).put(30).put(1.0f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 

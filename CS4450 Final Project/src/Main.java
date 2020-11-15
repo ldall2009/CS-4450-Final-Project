@@ -102,7 +102,7 @@ public class Main {
     ****************************************************************/ 
     private void initLightArrays() {
         lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(0.0f).put(0.0f).put(0.0f).put(1.0f).flip();
+        lightPosition.put(30.0f).put(70.0f).put(30.0f).put(1.0f).flip();
         whiteLight = BufferUtils.createFloatBuffer(4);
         whiteLight.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
     }
