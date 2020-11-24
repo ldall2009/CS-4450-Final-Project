@@ -10,9 +10,11 @@
   *   using textures and simplex noises along with blocks and coordinates to
   *   to create them
   ****************************************************************/
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.Random;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
@@ -42,7 +44,7 @@ public class Chunk {
 		try{
 			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("terrain.png"));
 		}
-		catch(Exception e) {
+		catch(IOException e) {
 			System.out.print("Error!");
 		}
 		
@@ -76,7 +78,6 @@ public class Chunk {
 			for(int z = 0; z < CHUNK_SIZE; z++){
 				for(int y = 0; y < heights[x][z]; y++){
 					Block.BlockType[] layerBlocks = middleLayer;
-					
 					if(y == 0)
 						layerBlocks = bottomLayer;
 					else if(y == heights[x][z] - 1)
@@ -91,6 +92,24 @@ public class Chunk {
 		this.startX = startX;
 		this.startY = startY;
 		this.startZ = startZ;
+	}
+
+	private boolean inChunk(int value) { 
+		return value > 0 && value < CHUNK_SIZE;
+	}
+	
+	public Block getBlockAtPoint(Vector3f position) {
+		Block result = null;
+		
+		int x = -(int)Math.floor((position.x - startX)/CUBE_LENGTH);
+		int y = -(int)Math.floor((position.y - startY)/CUBE_LENGTH);
+		int z = -(int)Math.floor((position.z - startZ)/CUBE_LENGTH);
+		
+		if(inChunk(x) && inChunk(y) && inChunk(z) ) {
+			result = blocks[x][y][z];
+		}
+
+		return result;
 	}
 	
 	/***************************************************************
@@ -141,7 +160,7 @@ public class Chunk {
 					if(blocks[x][y][z] != null) {
 						VertexPositionData.put(createCube(
 							(float)(startX + x * CUBE_LENGTH),
-							(float)(y*CUBE_LENGTH+(int)(CHUNK_SIZE*0.8)),
+							(float)(startY + y * CUBE_LENGTH),
 							(float)(startZ + z * CUBE_LENGTH)
 						));
 						VertexColorData.put(createCubeVertexCol(getCubeColor(blocks[x][y][z])));
@@ -327,7 +346,7 @@ public class Chunk {
 	 * purpose: generates the coordinates of the quads to render for
 	 * cube chunks
 	 ****************************************************************/
-	public static float[] createCube(float x, float y, float z){
+	private static float[] createCube(float x, float y, float z){
 		int offset = CUBE_LENGTH/2;
 		return new float[] {
 			//top quad

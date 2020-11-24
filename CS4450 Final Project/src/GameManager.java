@@ -116,6 +116,7 @@ public class GameManager {
 				* movementSpeed
 			);
 			camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
+			camera.applyMovement(chunk);
 			
 			// set the modelview matrix back to the identity
 			glLoadIdentity();

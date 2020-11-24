@@ -13,15 +13,20 @@
 ****************************************************************/ 
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 
 public class FPCameraController {
     
+	private static float SIZE = 2f;
+	private static float HEIGHT = 3;
+
     // 3d vector to store the camera's position in
     private Vector3f position = null;
     private Vector3f lookPosition = null;
+	private Vector3f deltaPosition = null;
     
     // the rotation around the Y axis of the camera
     private float yaw = 0.0f;
@@ -42,6 +47,8 @@ public class FPCameraController {
         lookPosition.x = 0f;
         lookPosition.y = 15f;
         lookPosition.z = 0f;
+
+		deltaPosition = new Vector3f();
 
     }
 
@@ -74,8 +81,8 @@ public class FPCameraController {
     public void walkForward(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
-        position.x -= xOffset;
-        position.z += zOffset;
+        deltaPosition.x -= xOffset;
+        deltaPosition.z += zOffset;
     }
 
     /***************************************************************
@@ -87,8 +94,8 @@ public class FPCameraController {
     public void walkBackwards(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
-        position.x += xOffset;
-        position.z -= zOffset;
+        deltaPosition.x += xOffset;
+        deltaPosition.z -= zOffset;
     }
 
     /***************************************************************
@@ -100,8 +107,8 @@ public class FPCameraController {
     public void strafeLeft(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw - 90));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw - 90));
-        position.x -= xOffset;
-        position.z += zOffset;
+        deltaPosition.x -= xOffset;
+        deltaPosition.z += zOffset;
     }
 
     /***************************************************************
@@ -113,8 +120,8 @@ public class FPCameraController {
     public void strafeRight(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw + 90));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw + 90));
-        position.x -= xOffset;
-        position.z += zOffset;
+        deltaPosition.x -= xOffset;
+        deltaPosition.z += zOffset;
     }
 
     /***************************************************************
@@ -123,7 +130,7 @@ public class FPCameraController {
     *
     ****************************************************************/ 
     public void moveUp(float distance) {
-        position.y -= distance;
+        deltaPosition.y -= distance;
     }
 
     /***************************************************************
@@ -132,8 +139,52 @@ public class FPCameraController {
     *
     ****************************************************************/ 
     public void moveDown(float distance) {
-        position.y += distance;
+        deltaPosition.y += distance;
     }
+
+	private Vector3f[] getCorners(Vector3f center) {
+		//System.out.println(center);
+		float height = HEIGHT/2;
+		float extent = SIZE/2;
+		return new Vector3f[] {
+			new Vector3f(center.x+extent,center.y+height,center.z+extent),
+			new Vector3f(center.x-extent,center.y+height,center.z+extent),
+			new Vector3f(center.x-extent,center.y-height,center.z+extent),
+			new Vector3f(center.x+extent,center.y-height,center.z+extent),
+
+			new Vector3f(center.x+extent,center.y+height,center.z-extent),
+			new Vector3f(center.x-extent,center.y+height,center.z-extent),
+			new Vector3f(center.x-extent,center.y-height,center.z-extent),
+			new Vector3f(center.x+extent,center.y-height,center.z-extent),
+		};
+	}
+
+	private Block[] getIntersections(Chunk chunk, Vector3f center) {
+		Vector3f[] corners = getCorners(center);
+		ArrayList<Block> blocks = new ArrayList<>(corners.length);
+
+		for(Vector3f corner : corners) {
+			Block b = chunk.getBlockAtPoint(corner);
+			if(b != null) {
+				blocks.add(b);
+			}
+		}
+
+		Block[] blockArray = new Block[blocks.size()];
+		return blocks.toArray(blockArray);
+	}
+
+	public void applyMovement(Chunk chunk) {
+		Vector3f newPosition = new Vector3f();
+		Vector3f.add(position, deltaPosition, newPosition);
+		
+		//position.translate(deltaPosition.x, deltaPosition.y, deltaPosition.z);
+		if(getIntersections(chunk, newPosition).length == 0 ) {
+			position = newPosition;
+		}
+		deltaPosition = new Vector3f();
+
+	}
 
     /***************************************************************
     * method: lookThrough
