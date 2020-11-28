@@ -33,6 +33,8 @@ class KeyInfo {
 		heldThisFrame = false;
 	}
 
+	public int getKeyCode() { return keyCode; }
+
 	public void update() {
 		heldLastFrame = heldThisFrame;
 		heldThisFrame = Keyboard.isKeyDown(keyCode);

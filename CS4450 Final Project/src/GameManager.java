@@ -29,15 +29,16 @@ public class GameManager {
 	private static final Vector3f CAMERA_POSITION = new Vector3f(-30,-50,-30);
 	
 	// See constructor for key bindings
-	private static final int ESCAPE = Keyboard.KEY_ESCAPE;
+	private final int EXIT;
+	private final int TOGGLE_DEBUG_POSITION;
 	
-	private static final int VERTICAL_AXIS = 0;
+	private final int VERTICAL_AXIS;
 	
-	private static final int FORWARD_AXIS  = 1;
-	private static final int STRAFE_AXIS   = 2;
-	
-	private static final int FORWARD_AXIS_ALT  = 3;
-	private static final int STRAFE_AXIS_ALT   = 4;
+	private final int FORWARD_AXIS;
+	private final int STRAFE_AXIS;
+
+	private final int FORWARD_AXIS_ALT;
+	private final int STRAFE_AXIS_ALT;
 	
 	private InputManager input;
 	private Chunk chunk;
@@ -51,12 +52,15 @@ public class GameManager {
 		camera = new FPCameraController(CAMERA_POSITION.x, CAMERA_POSITION.y, CAMERA_POSITION.z);
 		
 		input = new InputManager();
-		input.addButton(ESCAPE, ESCAPE);
-		input.addAxis(VERTICAL_AXIS,    Keyboard.KEY_SPACE, Keyboard.KEY_LSHIFT);
-		input.addAxis(FORWARD_AXIS,     Keyboard.KEY_W,     Keyboard.KEY_S);
-		input.addAxis(STRAFE_AXIS,      Keyboard.KEY_D,     Keyboard.KEY_A);
-		input.addAxis(FORWARD_AXIS_ALT, Keyboard.KEY_UP,    Keyboard.KEY_DOWN);
-		input.addAxis(STRAFE_AXIS_ALT,  Keyboard.KEY_RIGHT, Keyboard.KEY_LEFT);
+
+		EXIT                  = input.addButton(Keyboard.KEY_ESCAPE);
+		TOGGLE_DEBUG_POSITION = input.addButton(Keyboard.KEY_P);
+
+		VERTICAL_AXIS    = input.addAxis(Keyboard.KEY_SPACE, Keyboard.KEY_LSHIFT);
+		FORWARD_AXIS     = input.addAxis(Keyboard.KEY_W,     Keyboard.KEY_S);
+		STRAFE_AXIS      = input.addAxis(Keyboard.KEY_D,     Keyboard.KEY_A);
+		FORWARD_AXIS_ALT = input.addAxis(Keyboard.KEY_UP,    Keyboard.KEY_DOWN);
+		STRAFE_AXIS_ALT  = input.addAxis(Keyboard.KEY_RIGHT, Keyboard.KEY_LEFT);
 
 		lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(30).put(70).put(40).put(1.0f).flip();
@@ -84,7 +88,7 @@ public class GameManager {
 		input.update();
 		
 		// keep looping till the display window is closed the ESC key is down
-		while (!Display.isCloseRequested() && !Keyboard.isKeyDown(ESCAPE)) {
+		while (!Display.isCloseRequested() && !input.isHeld(EXIT)) {
 			time = Sys.getTime();
 			lastTime = time;
 			input.update();
@@ -117,6 +121,10 @@ public class GameManager {
 			);
 			camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
 			camera.applyMovement(chunk);
+
+			if(input.isDown(TOGGLE_DEBUG_POSITION)) {
+				camera.toggleDebugPosition();
+			}
 			
 			// set the modelview matrix back to the identity
 			glLoadIdentity();

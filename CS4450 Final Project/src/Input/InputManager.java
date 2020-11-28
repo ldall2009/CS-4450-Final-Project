@@ -40,31 +40,38 @@ public class InputManager {
 
 	/**
 	 * Adds a new button which the InputManager will watch on future updates.
-	 * @param label Reference to the button.
+	 * This does nothing if the key was already being watched.
+	 * 
 	 * @param key Key mapped to button.
+	 * @return Label which button can be referenced with.
 	 */
-	public void addButton(Integer label, Integer key) {
-		watchList.put(label, new KeyInfo(key));
+	public int addButton(Integer key) {
+		int label = key;
+
+		if(!watchList.containsKey(key)) {
+			watchList.put(label, new KeyInfo(key));
+		}
+
+		return label;
 	}
 
 	/**
 	 * Creates a new virtual axis.
 	 * 
-	 * This isn't a real axis, but rather a pair of opposite keys.
+	 * This isn't a real axis, but rather a pair of opposite keys. Calling this
+	 * repeatedly with the same pair of keys WILL create new axis.
 	 * 
 	 * @param label Identifier for the axis. Is arbitrary.
 	 * @param positiveKey Key which yields 1.
 	 * @param negativeKey Key which yields -1.
+	 * @return A unique label which the axis may be referenced by.
 	 */
-	public void addAxis(Integer label, Integer positiveKey, Integer negativeKey) {
-		axisList.put(label, new Axis(positiveKey, negativeKey));
+	public int addAxis(Integer positiveKey, Integer negativeKey) {
+		int label = axisList.size();
 
-		if(!watchList.containsKey(positiveKey)) {
-			watchList.put(positiveKey, new KeyInfo(positiveKey));
-		}
-		if(!watchList.containsKey(negativeKey)) {
-			watchList.put(negativeKey, new KeyInfo(negativeKey));
-		}
+		axisList.put(label, new Axis(addButton(positiveKey), addButton(negativeKey)));
+
+		return label;
 	}
 
 	/**

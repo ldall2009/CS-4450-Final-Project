@@ -33,6 +33,9 @@ public class FPCameraController {
     
     // the rotation around the X axis of the camera
     private float pitch = 0.0f;
+
+	// While true, dump position data to console
+	private boolean debugPosition = false;
     
     /***************************************************************
     * method: FPCameraController
@@ -51,6 +54,9 @@ public class FPCameraController {
 		deltaPosition = new Vector3f();
 
     }
+
+	public void toggleDebugPosition() { debugPosition = !debugPosition; }
+	public void setDebugPosition(boolean value) { debugPosition = value; }
 
     /***************************************************************
     * method: yaw
@@ -200,7 +206,10 @@ public class FPCameraController {
 	}
 
 	public void applyMovement(Chunk chunk) {
-		System.out.println(position);
+		if(debugPosition) {
+			System.out.println(position);
+		}
+
 		move(chunk, new Vector3f(deltaPosition.x, 0, 0));
 		move(chunk, new Vector3f(0, deltaPosition.y, 0));
 		move(chunk, new Vector3f(0, 0, deltaPosition.z));
