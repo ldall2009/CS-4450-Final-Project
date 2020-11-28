@@ -83,9 +83,22 @@ public class FPCameraController {
     * purpose: decrements the camera's current pitch rotation
     *
     ****************************************************************/ 
-    public void pitch(float amount) {
-        // decrement the pitch by the amount param
-        pitch -= amount;
+public void pitch(float amount) {
+
+        // if user is looking within a normal pitch range for a human
+        if (pitch - amount >= -90 && pitch - amount <= 90) {
+
+          // decrement the pitch by the amount param
+            pitch -= amount;
+        } 
+        //if the played would go past looking straight up
+        else if (pitch - amount < -90) {
+            pitch = -90;
+        } 
+        //if the player would go past looking straight down
+        else {
+            pitch = 90;
+        }
     }
 
     /***************************************************************

@@ -264,16 +264,16 @@ public class Chunk {
 					createTexUV(2, 0, 0), // Right
 				};
 				break;
-			case Grass:
-				faces = new float[][] {
-					createTexUV(2, 9, 0), // Top
-					createTexUV(2, 0, 0), // Bottom
-					createTexUV(3, 0, 2), // Front
-					createTexUV(3, 0, 0), // Back
-					createTexUV(3, 0, 2), // Left
-					createTexUV(3, 0, 0), // Right
-				};
-				break;
+           		 case Grass:
+               			 faces = new float[][] {
+                    			createTexUV(2, 9, 0), // Top
+                    			createTexUV(2, 0, 0), // Bottom
+                    			createTexUV(3, 0, 2), // Front
+                    			createTexUV(3, 0, 0), // Back
+                    			createTexUV(3, 0, 2), // Left
+                    			createTexUV(3, 0, 2), // Right
+                		};
+                		break;
 			case Water:
 				faces = new float[][] {
 					createTexUV(1, 11, 0), // Top
