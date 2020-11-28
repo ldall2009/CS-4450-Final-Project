@@ -95,13 +95,13 @@ public class Chunk {
 	}
 
 	private boolean inChunk(int value) { 
-		return value > 0 && value < CHUNK_SIZE;
+		return value >= 0 && value < CHUNK_SIZE;
 	}
 	
 	public Block getBlockAtPoint(Vector3f position) {
 		Block result = null;
 		
-		int x = -(int)Math.floor((position.x - startX)/CUBE_LENGTH);
+		int x = -(int)Math.floor((position.x - startX +0.5)/CUBE_LENGTH);
 		int y = -(int)Math.floor((position.y - startY)/CUBE_LENGTH);
 		int z = -(int)Math.floor((position.z - startZ)/CUBE_LENGTH);
 		

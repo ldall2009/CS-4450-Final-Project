@@ -26,7 +26,7 @@ import java.nio.FloatBuffer;
 public class GameManager {
 	
 	private static final Vector3f CHUNK_POSITION = new Vector3f(0,0,0);
-	private static final Vector3f CAMERA_POSITION = new Vector3f(-30,-70,-30);
+	private static final Vector3f CAMERA_POSITION = new Vector3f(-30,-50,-30);
 	
 	// See constructor for key bindings
 	private static final int ESCAPE = Keyboard.KEY_ESCAPE;
@@ -122,6 +122,7 @@ public class GameManager {
 			glLoadIdentity();
 			
 			// look through the camera before you draw anything
+			camera.renderBoundary();
 			camera.lookThrough();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			

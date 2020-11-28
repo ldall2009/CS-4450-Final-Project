@@ -20,8 +20,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class FPCameraController {
     
-	private static float SIZE = 2f;
-	private static float HEIGHT = 3;
+	private static float SIZE = 1.2f;
+	private static float HEIGHT = 3.5f;
 
     // 3d vector to store the camera's position in
     private Vector3f position = null;
@@ -144,18 +144,23 @@ public class FPCameraController {
 
 	private Vector3f[] getCorners(Vector3f center) {
 		//System.out.println(center);
-		float height = HEIGHT/2;
+		float height = HEIGHT;
 		float extent = SIZE/2;
-		return new Vector3f[] {
-			new Vector3f(center.x+extent,center.y+height,center.z+extent),
-			new Vector3f(center.x-extent,center.y+height,center.z+extent),
-			new Vector3f(center.x-extent,center.y-height,center.z+extent),
-			new Vector3f(center.x+extent,center.y-height,center.z+extent),
 
-			new Vector3f(center.x+extent,center.y+height,center.z-extent),
-			new Vector3f(center.x-extent,center.y+height,center.z-extent),
-			new Vector3f(center.x-extent,center.y-height,center.z-extent),
-			new Vector3f(center.x+extent,center.y-height,center.z-extent),
+		float xSize = extent;
+		float ySize = height;
+		float zSize = extent;
+
+		return new Vector3f[] {
+			new Vector3f(center.x+xSize,center.y+ySize,center.z+zSize),
+			new Vector3f(center.x+xSize,center.y+ySize,center.z-zSize),
+			new Vector3f(center.x-xSize,center.y+ySize,center.z+zSize),
+			new Vector3f(center.x-xSize,center.y+ySize,center.z-zSize),
+
+			new Vector3f(center.x+xSize,center.y,center.z+zSize),
+			new Vector3f(center.x+xSize,center.y,center.z-zSize),
+			new Vector3f(center.x-xSize,center.y,center.z+zSize),
+			new Vector3f(center.x-xSize,center.y,center.z-zSize),
 		};
 	}
 
@@ -174,14 +179,32 @@ public class FPCameraController {
 		return blocks.toArray(blockArray);
 	}
 
-	public void applyMovement(Chunk chunk) {
+	/**
+	 * Attempts to move by the given delta.
+	 * @param chunk Chunk with collision data.
+	 * @param delta Amount to move.
+	 * @return True if entire move was executed; false otherwise.
+	 */
+	public boolean move(Chunk chunk, Vector3f delta) {
 		Vector3f newPosition = new Vector3f();
-		Vector3f.add(position, deltaPosition, newPosition);
+		Vector3f.add(position, delta, newPosition);
 		
-		//position.translate(deltaPosition.x, deltaPosition.y, deltaPosition.z);
 		if(getIntersections(chunk, newPosition).length == 0 ) {
 			position = newPosition;
+			return true;
 		}
+		else {
+			return false;
+		}
+
+	}
+
+	public void applyMovement(Chunk chunk) {
+		System.out.println(position);
+		move(chunk, new Vector3f(deltaPosition.x, 0, 0));
+		move(chunk, new Vector3f(0, deltaPosition.y, 0));
+		move(chunk, new Vector3f(0, 0, deltaPosition.z));
+		
 		deltaPosition = new Vector3f();
 
 	}
@@ -193,6 +216,8 @@ public class FPCameraController {
     *
     ****************************************************************/ 
     public void lookThrough() {
+        //glTranslatef(0f, 0f, -0.1f);
+
         // rotate the pitch around the X axis
         glRotatef(pitch, 1.0f, 0.0f, 0.0f);
         // rotate the yaw around the Y axis
@@ -200,5 +225,81 @@ public class FPCameraController {
         // translate to the position vector's location
         glTranslatef(position.x, position.y, position.z);
     }
+
+	private void glVertex(Vector3f p) {
+		glVertex3f(p.x, p.y, p.z);
+	}
+	
+	public void renderBoundary() {
+		Vector3f[] corners = getCorners(position);
+
+		/*
+		glPointSize(10);
+		glBegin(GL_LINES);
+		glColor3f(1.0f, 1.0f, 1.0f);
+		for(Vector3f corner : corners) {
+			glVertex3f(corner.x, corner.y, corner.z);
+		}
+		glEnd();
+*/
+
+		try {
+            glBegin(GL_QUADS);
+            glColor3f(1.0f, 0.0f, 1.0f);
+            glVertex(corners[0]);
+            glVertex(corners[1]);
+            glVertex(corners[2]);
+            glVertex(corners[3]);
+            glEnd();
+            
+            glBegin(GL_QUADS);
+            glColor3f(0.7f, 0.2f, 1.0f);
+            glVertex(corners[4]);
+            glVertex(corners[5]);
+            glVertex(corners[6]);
+            glVertex(corners[7]);
+            glEnd();
+            
+			/*
+            glBegin(GL_QUADS);
+            glColor3f(0.0f, 0.0f, 1.0f);
+            
+            glVertex3f(1.0f, -1.0f, -1.0f);
+            glVertex3f(1.0f, -1.0f, -3.0f);
+            glVertex3f(1.0f, 1.0f, -3.0f);
+            glVertex3f(1.0f, 1.0f, -1.0f);
+            glEnd();
+            
+            glBegin(GL_QUADS);
+            glColor3f(1.0f, 0.0f, 0.0f);
+            
+            glVertex3f(-1.0f, -1.0f, -3.0f);
+            glVertex3f(-1.0f, -1.0f, -1.0f);
+            glVertex3f(-1.0f, 1.0f, -1.0f);
+            glVertex3f(-1.0f, 1.0f, -3.0f);
+            glEnd();
+            
+            glBegin(GL_QUADS);
+            glColor3f(1.0f, 0.5f, 0.5f);
+            
+            glVertex3f(1.0f, -1.0f, -1.0f);
+            glVertex3f(-1.0f, -1.0f, -1.0f);
+            glVertex3f(-1.0f, -1.0f, -3.0f);
+            glVertex3f(1.0f, -1.0f, -3.0f);
+            glEnd();
+            
+            glBegin(GL_QUADS);
+            glColor3f(0.0f, 1.0f, 0.0f);
+            
+            glVertex3f(1.0f, 1.0f, -1.0f);
+            glVertex3f(-1.0f, 1.0f, -1.0f);
+            glVertex3f(-1.0f, 1.0f, -3.0f);
+            glVertex3f(1.0f, 1.0f, -3.0f);
+            glEnd();
+*/
+
+            
+        } catch (Exception e) { }
+	}
 
 }
