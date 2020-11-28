@@ -31,6 +31,7 @@ public class GameManager {
 	// See constructor for key bindings
 	private final int EXIT;
 	private final int TOGGLE_DEBUG_POSITION;
+	private final int JUMP;
 	
 	private final int VERTICAL_AXIS;
 	
@@ -56,6 +57,8 @@ public class GameManager {
 		EXIT                  = input.addButton(Keyboard.KEY_ESCAPE);
 		TOGGLE_DEBUG_POSITION = input.addButton(Keyboard.KEY_P);
 
+		JUMP = input.addButton(Keyboard.KEY_SPACE);
+
 		VERTICAL_AXIS    = input.addAxis(Keyboard.KEY_SPACE, Keyboard.KEY_LSHIFT);
 		FORWARD_AXIS     = input.addAxis(Keyboard.KEY_W,     Keyboard.KEY_S);
 		STRAFE_AXIS      = input.addAxis(Keyboard.KEY_D,     Keyboard.KEY_A);
@@ -64,6 +67,16 @@ public class GameManager {
 
 		lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(30).put(70).put(40).put(1.0f).flip();
+	}
+	
+	private long currentTime() {
+		//return java.time.Clock.systemUTC().instant().getNano();
+		return Sys.getTime();
+	}
+
+	private long timeResolution() {
+		//return 1000000000;
+		return Sys.getTimerResolution();
 	}
 	
 	/***************************************************************
@@ -76,9 +89,10 @@ public class GameManager {
 	public void gameLoop() {
 		float dx = 0.0f;
 		float dy = 0.0f;
-		float dt = 0.0f; // length of frame
-		float lastTime = 0.0f; // when the last frame was
-		long time = 0;
+
+		long lastTime;
+		long time;
+
 		float mouseSensitivity = 0.09f;
 		float movementSpeed = .35f;
 		// hide the mouse
@@ -87,11 +101,23 @@ public class GameManager {
 		chunk.rebuildMesh();
 		input.update();
 		
+		time = currentTime();
+
 		// keep looping till the display window is closed the ESC key is down
 		while (!Display.isCloseRequested() && !input.isHeld(EXIT)) {
-			time = Sys.getTime();
 			lastTime = time;
+			time = currentTime();
+			float dt = (float) (
+				(time - lastTime)/((double) (timeResolution()))
+			);
+			//dt = Math.max(0f, dt);
+
 			input.update();
+
+			if(input.isDown(TOGGLE_DEBUG_POSITION)) {
+				camera.toggleDebugPosition();
+			}
+			
 			
 			// distance in mouse movement
 			// from the last getDX() call.
@@ -119,18 +145,16 @@ public class GameManager {
 				input.getCombinedAxis(new int[]{STRAFE_AXIS, STRAFE_AXIS_ALT})
 				* movementSpeed
 			);
-			camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
-			camera.applyMovement(chunk);
-
-			if(input.isDown(TOGGLE_DEBUG_POSITION)) {
-				camera.toggleDebugPosition();
+			//camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
+			if(input.isDown(JUMP)) {
+				camera.jump();
 			}
-			
+			camera.applyMovement(chunk, dt);
+
 			// set the modelview matrix back to the identity
 			glLoadIdentity();
 			
 			// look through the camera before you draw anything
-			camera.renderBoundary();
 			camera.lookThrough();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			

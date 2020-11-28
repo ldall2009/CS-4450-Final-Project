@@ -15,6 +15,7 @@
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.Sys;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -23,10 +24,17 @@ public class FPCameraController {
 	private static float SIZE = 1.2f;
 	private static float HEIGHT = 3.5f;
 
+	private static float WALK_SPEED = 60f;
+	private static float GRAVITY = 40f;
+	private static float JUMP_IMPULSE = -20f;
+
     // 3d vector to store the camera's position in
     private Vector3f position = null;
-    private Vector3f lookPosition = null;
 	private Vector3f deltaPosition = null;
+	private Vector3f velocity = null;
+	private Vector3f acceleration = null;
+
+    private Vector3f lookPosition = null;
     
     // the rotation around the Y axis of the camera
     private float yaw = 0.0f;
@@ -52,6 +60,8 @@ public class FPCameraController {
         lookPosition.z = 0f;
 
 		deltaPosition = new Vector3f();
+		velocity = new Vector3f();
+		acceleration = new Vector3f(0f, GRAVITY, 0f);
 
     }
 
@@ -148,6 +158,10 @@ public class FPCameraController {
         deltaPosition.y += distance;
     }
 
+	public void jump() {
+		velocity.y += JUMP_IMPULSE;
+	}
+
 	private Vector3f[] getCorners(Vector3f center) {
 		//System.out.println(center);
 		float height = HEIGHT;
@@ -191,7 +205,7 @@ public class FPCameraController {
 	 * @param delta Amount to move.
 	 * @return True if entire move was executed; false otherwise.
 	 */
-	public boolean move(Chunk chunk, Vector3f delta) {
+	private boolean move(Chunk chunk, Vector3f delta) {
 		Vector3f newPosition = new Vector3f();
 		Vector3f.add(position, delta, newPosition);
 		
@@ -205,14 +219,28 @@ public class FPCameraController {
 
 	}
 
-	public void applyMovement(Chunk chunk) {
+	public void applyMovement(Chunk chunk, float deltaTime) {
 		if(debugPosition) {
 			System.out.println(position);
 		}
 
+		deltaPosition.scale(deltaTime * WALK_SPEED);
+
+		Vector3f accelStep = new Vector3f(acceleration);
+		accelStep.scale(deltaTime);
+		Vector3f.add(velocity, accelStep, velocity);
+
+		Vector3f velStep = new Vector3f(velocity);
+		velStep.scale(deltaTime);
+		Vector3f.add(deltaPosition, velStep, deltaPosition);
+
 		move(chunk, new Vector3f(deltaPosition.x, 0, 0));
-		move(chunk, new Vector3f(0, deltaPosition.y, 0));
 		move(chunk, new Vector3f(0, 0, deltaPosition.z));
+
+		if(!move(chunk, new Vector3f(0, deltaPosition.y, 0))) {
+			// When we land on something, reset the velocity
+			velocity = new Vector3f();
+		}
 		
 		deltaPosition = new Vector3f();
 
@@ -239,76 +267,4 @@ public class FPCameraController {
 		glVertex3f(p.x, p.y, p.z);
 	}
 	
-	public void renderBoundary() {
-		Vector3f[] corners = getCorners(position);
-
-		/*
-		glPointSize(10);
-		glBegin(GL_LINES);
-		glColor3f(1.0f, 1.0f, 1.0f);
-		for(Vector3f corner : corners) {
-			glVertex3f(corner.x, corner.y, corner.z);
-		}
-		glEnd();
-*/
-
-		try {
-            glBegin(GL_QUADS);
-            glColor3f(1.0f, 0.0f, 1.0f);
-            glVertex(corners[0]);
-            glVertex(corners[1]);
-            glVertex(corners[2]);
-            glVertex(corners[3]);
-            glEnd();
-            
-            glBegin(GL_QUADS);
-            glColor3f(0.7f, 0.2f, 1.0f);
-            glVertex(corners[4]);
-            glVertex(corners[5]);
-            glVertex(corners[6]);
-            glVertex(corners[7]);
-            glEnd();
-            
-			/*
-            glBegin(GL_QUADS);
-            glColor3f(0.0f, 0.0f, 1.0f);
-            
-            glVertex3f(1.0f, -1.0f, -1.0f);
-            glVertex3f(1.0f, -1.0f, -3.0f);
-            glVertex3f(1.0f, 1.0f, -3.0f);
-            glVertex3f(1.0f, 1.0f, -1.0f);
-            glEnd();
-            
-            glBegin(GL_QUADS);
-            glColor3f(1.0f, 0.0f, 0.0f);
-            
-            glVertex3f(-1.0f, -1.0f, -3.0f);
-            glVertex3f(-1.0f, -1.0f, -1.0f);
-            glVertex3f(-1.0f, 1.0f, -1.0f);
-            glVertex3f(-1.0f, 1.0f, -3.0f);
-            glEnd();
-            
-            glBegin(GL_QUADS);
-            glColor3f(1.0f, 0.5f, 0.5f);
-            
-            glVertex3f(1.0f, -1.0f, -1.0f);
-            glVertex3f(-1.0f, -1.0f, -1.0f);
-            glVertex3f(-1.0f, -1.0f, -3.0f);
-            glVertex3f(1.0f, -1.0f, -3.0f);
-            glEnd();
-            
-            glBegin(GL_QUADS);
-            glColor3f(0.0f, 1.0f, 0.0f);
-            
-            glVertex3f(1.0f, 1.0f, -1.0f);
-            glVertex3f(-1.0f, 1.0f, -1.0f);
-            glVertex3f(-1.0f, 1.0f, -3.0f);
-            glVertex3f(1.0f, 1.0f, -3.0f);
-            glEnd();
-*/
-
-            
-        } catch (Exception e) { }
-	}
-
 }
