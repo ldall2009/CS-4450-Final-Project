@@ -59,9 +59,9 @@ public class FPCameraController {
     public FPCameraController(float x, float y, float z) {
         position = new Vector3f(x, y, z);
         lookPosition = new Vector3f(x, y, z);
-        lookPosition.x = 0f;
-        lookPosition.y = 15f;
-        lookPosition.z = 0f;
+        lookPosition.x = 30f;
+        lookPosition.y = 70f;
+        lookPosition.z = 40f;
 
         deltaPosition = new Vector3f();
         velocity = new Vector3f();
@@ -187,12 +187,25 @@ public class FPCameraController {
     }
 
     public FloatBuffer moveLightForward(FloatBuffer lightPosition){
+        if(lookPosition.x > 90){
+            return lightPosition;
+        }
+        if(lookPosition.z > 90){
+            return lightPosition;
+        }
         lightPosition.put(lookPosition.x+=1).put(
 lookPosition.y).put(lookPosition.z+=1).put(1.0f).flip();
+        
         return lightPosition;
     }
     
     public FloatBuffer moveLightBackward(FloatBuffer lightPosition){
+        if(lookPosition.x < -15){
+            return lightPosition;
+        }
+        if(lookPosition.z < -15){
+            return lightPosition;
+        }
         lightPosition.put(lookPosition.x-=1).put(
 lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
         return lightPosition;
