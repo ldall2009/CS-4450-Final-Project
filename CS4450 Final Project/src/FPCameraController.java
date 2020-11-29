@@ -46,6 +46,7 @@ public class FPCameraController {
     // While true, dump position data to console
     private boolean debugPosition = false;
 
+	private boolean flying = false;
     private boolean hasHitGround = false;
 
     /**
@@ -76,6 +77,14 @@ public class FPCameraController {
     public void setDebugPosition(boolean value) {
         debugPosition = value;
     }
+
+	public void toggleFlying() {
+		flying = !flying;
+
+		if(flying) {
+			velocity = new Vector3f();
+		}
+	}
 
     /**
      * *************************************************************
@@ -173,7 +182,9 @@ public class FPCameraController {
      ***************************************************************
      */
     public void moveUp(float distance) {
-        deltaPosition.y -= distance;
+		if(flying){
+        	deltaPosition.y -= distance;
+		}
     }
 
     /**
@@ -183,7 +194,9 @@ public class FPCameraController {
      ***************************************************************
      */
     public void moveDown(float distance) {
-        deltaPosition.y += distance;
+		if(flying){
+        	deltaPosition.y += distance;
+		}
     }
 
     public FloatBuffer moveLightForward(FloatBuffer lightPosition){
@@ -206,6 +219,7 @@ lookPosition.y).put(lookPosition.z+=1).put(1.0f).flip();
         if(lookPosition.z < -15){
             return lightPosition;
         }
+
         lightPosition.put(lookPosition.x-=1).put(
 lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
         return lightPosition;
@@ -213,7 +227,7 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
     
     
     public void jump() {
-        if (hasHitGround) {
+        if (!flying && hasHitGround) {
             velocity.y += JUMP_IMPULSE;
             hasHitGround = false;
         }
@@ -281,13 +295,15 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
 
         deltaPosition.scale(deltaTime * WALK_SPEED);
 
-        Vector3f accelStep = new Vector3f(acceleration);
-        accelStep.scale(deltaTime);
-        Vector3f.add(velocity, accelStep, velocity);
+		if(!flying) {
+			Vector3f accelStep = new Vector3f(acceleration);
+			accelStep.scale(deltaTime);
+			Vector3f.add(velocity, accelStep, velocity);
 
-        Vector3f velStep = new Vector3f(velocity);
-        velStep.scale(deltaTime);
-        Vector3f.add(deltaPosition, velStep, deltaPosition);
+			Vector3f velStep = new Vector3f(velocity);
+			velStep.scale(deltaTime);
+			Vector3f.add(deltaPosition, velStep, deltaPosition);
+		}
 
         if (deltaPosition.y != 0) {
             hasHitGround = false;

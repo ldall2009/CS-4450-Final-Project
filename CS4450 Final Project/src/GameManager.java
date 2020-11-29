@@ -34,6 +34,7 @@ public class GameManager {
     private final int TOGGLE_DEBUG_POSITION;
     private final int JUMP;
     private final int TEXTURES;
+	private final int TOGGLE_FLY_MODE;
     private final int LIGHTFORWARD;
     private final int LIGHTBACKWARD;
 
@@ -64,6 +65,7 @@ public class GameManager {
         LIGHTFORWARD = input.addButton(Keyboard.KEY_E);
         LIGHTBACKWARD = input.addButton(Keyboard.KEY_R);
         TOGGLE_DEBUG_POSITION = input.addButton(Keyboard.KEY_P);
+		TOGGLE_FLY_MODE = input.addButton(Keyboard.KEY_F);
 
         JUMP = input.addButton(Keyboard.KEY_SPACE);
 
@@ -158,10 +160,14 @@ public class GameManager {
                     input.getCombinedAxis(new int[]{STRAFE_AXIS, STRAFE_AXIS_ALT})
                     * movementSpeed
             );
-            //camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
+            camera.moveUp(input.getAxis(VERTICAL_AXIS) * movementSpeed);
             if (input.isDown(JUMP)) {
                 camera.jump();
             }
+			if (input.isDown(TOGGLE_FLY_MODE)) {
+				camera.toggleFlying();
+			}
+
             camera.applyMovement(chunk, dt);
 
             // set the modelview matrix back to the identity
