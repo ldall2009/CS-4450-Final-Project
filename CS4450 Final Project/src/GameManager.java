@@ -32,6 +32,7 @@ public class GameManager {
 	private final int EXIT;
 	private final int TOGGLE_DEBUG_POSITION;
 	private final int JUMP;
+        private final int TEXTURES;
 	
 	private final int VERTICAL_AXIS;
 	
@@ -55,6 +56,7 @@ public class GameManager {
 		input = new InputManager();
 
 		EXIT                  = input.addButton(Keyboard.KEY_ESCAPE);
+                TEXTURES              = input.addButton(Keyboard.KEY_Q);
 		TOGGLE_DEBUG_POSITION = input.addButton(Keyboard.KEY_P);
 
 		JUMP = input.addButton(Keyboard.KEY_SPACE);
@@ -105,6 +107,10 @@ public class GameManager {
 
 		// keep looping till the display window is closed the ESC key is down
 		while (!Display.isCloseRequested() && !input.isHeld(EXIT)) {
+                    
+                    if (input.isDown(TEXTURES)){
+                        chunk.changeTextures();
+                    }
 			lastTime = time;
 			time = currentTime();
 			float dt = (float) (

@@ -33,6 +33,8 @@ public class Chunk {
 	private int VBOTextureHandle;
 	private Texture texture;
 	private double[][] heights;
+        private static boolean diffTextures = false;
+        private static boolean oldTextures = false;
 	//private int scale;
 	
 	/***************************************************************
@@ -42,7 +44,7 @@ public class Chunk {
 	 ****************************************************************/
 	public Chunk(int startX, int startY, int startZ){
 		try{
-			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("terrain.png"));
+			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("textureTerrain.png"));
 		}
 		catch(IOException e) {
 			System.out.print("Error!");
@@ -118,6 +120,10 @@ public class Chunk {
 	 *
 	 ****************************************************************/
 	public void render(){
+            if (diffTextures != oldTextures){
+                oldTextures = diffTextures;
+                rebuildMesh();
+            }
 		glPushMatrix();
 		glBindBuffer(GL_ARRAY_BUFFER, VBOVertexHandle);
 		glVertexPointer(3, GL_FLOAT, 0, 0L);
@@ -253,7 +259,9 @@ public class Chunk {
 		
 		float[][] faces;
 		
-		switch (block.getType()) {
+                if (!diffTextures) {
+                    //System.out.println("Texture Pack off, loading normal textures");
+                    switch (block.getType()) {
 			case Dirt:
 				faces = new float[][] {
 					createTexUV(2, 0, 0), // Top
@@ -324,7 +332,90 @@ public class Chunk {
 					createTexUV(3, 0, 0), // Right
 				};
 				break;
-		}
+                    }
+                    
+                }
+                
+                else {
+                //System.out.println("Texture Pack on");
+		switch (block.getType()) {
+                    //DIRT DONE
+			case Dirt:
+				faces = new float[][] {
+					createTexUV(5, 0, 0), // Top
+					createTexUV(5, 0, 0), // Bottom
+					createTexUV(5, 0, 2), // Front
+					createTexUV(5, 0, 0), // Back
+					createTexUV(5, 0, 2), // Left
+					createTexUV(5, 0, 0), // Right
+				};
+				break;
+                               //GRASS DONE
+           		 case Grass:
+               			 faces = new float[][] {
+                    			createTexUV(2, 8, 0), // Top
+                    			createTexUV(5, 0, 0), // Bottom
+                    			createTexUV(4, 0, 2), // Front
+                    			createTexUV(4, 0, 0), // Back
+                    			createTexUV(4, 0, 2), // Left
+                    			createTexUV(4, 0, 2), // Right
+                		};
+                		break;
+                                //WATER DONE
+			case Water:
+				faces = new float[][] {
+					createTexUV(0, 9, 0), // Top
+					createTexUV(0, 9, 0), // Bottom
+					createTexUV(0, 9, 2), // Front
+					createTexUV(0, 9, 0), // Back
+					createTexUV(0, 9, 2), // Left
+					createTexUV(0, 9, 0), // Right
+				};
+				break;
+                                //STONE DONE
+			case Stone:
+				faces = new float[][] {
+					createTexUV(2, 10, 0), // Top
+					createTexUV(2, 10, 0), // Bottom
+					createTexUV(2, 10, 2), // Front
+					createTexUV(2, 10, 0), // Back
+					createTexUV(2, 10, 2), // Left
+					createTexUV(2, 10, 0), // Right
+				};
+				break;
+                                //BEDROCK DONE
+			case Bedrock:
+				faces = new float[][] {
+					createTexUV(2, 11, 0), // Top
+					createTexUV(2, 11, 0), // Bottom
+					createTexUV(2, 11, 2), // Front
+					createTexUV(2, 11, 0), // Back
+					createTexUV(2, 11, 2), // Left
+					createTexUV(2, 11, 0), // Right
+				};
+				break;
+			case Sand:
+				faces = new float[][] {
+					createTexUV(2, 12, 0), // Top
+					createTexUV(2, 12, 0), // Bottom
+					createTexUV(2, 12, 2), // Front
+					createTexUV(2, 12, 0), // Back
+					createTexUV(2, 12, 2), // Left
+					createTexUV(2, 12, 0), // Right
+				};
+				break;
+			default:
+				faces = new float[][] {
+					createTexUV(2, 9, 0), // Top
+					createTexUV(2, 0, 0), // Bottom
+					createTexUV(3, 0, 2), // Front
+					createTexUV(3, 0, 0), // Back
+					createTexUV(3, 0, 2), // Left
+					createTexUV(3, 0, 0), // Right
+				};
+				break;
+                    }
+                }
 		
 		float[] texture = new float[faces.length*VERTEX_COUNT];
 		
@@ -390,5 +481,14 @@ public class Chunk {
 	private float[] getCubeColor(Block block){
 		return new float[]{1,1,1};
 	}
+        
+        /***************************************************************
+	 * method: changeTextures
+	 * purpose: changes the textures used in our chunk
+	 *
+	 ****************************************************************/
+        public void changeTextures(){
+            diffTextures = !diffTextures;
+        }
 	
 }

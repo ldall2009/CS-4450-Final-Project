@@ -44,6 +44,8 @@ public class FPCameraController {
 
 	// While true, dump position data to console
 	private boolean debugPosition = false;
+        
+    private boolean hasHitGround = false;
     
     /***************************************************************
     * method: FPCameraController
@@ -172,7 +174,10 @@ public void pitch(float amount) {
     }
 
 	public void jump() {
+            if (hasHitGround) {
 		velocity.y += JUMP_IMPULSE;
+                hasHitGround = false;
+            }
 	}
 
 	private Vector3f[] getCorners(Vector3f center) {
@@ -246,6 +251,10 @@ public void pitch(float amount) {
 		Vector3f velStep = new Vector3f(velocity);
 		velStep.scale(deltaTime);
 		Vector3f.add(deltaPosition, velStep, deltaPosition);
+                
+                if(deltaPosition.y != 0) {
+                    hasHitGround = false;
+                }
 
 		move(chunk, new Vector3f(deltaPosition.x, 0, 0));
 		move(chunk, new Vector3f(0, 0, deltaPosition.z));
@@ -253,6 +262,7 @@ public void pitch(float amount) {
 		if(!move(chunk, new Vector3f(0, deltaPosition.y, 0))) {
 			// When we land on something, reset the velocity
 			velocity = new Vector3f();
+                        hasHitGround = true;
 		}
 		
 		deltaPosition = new Vector3f();
