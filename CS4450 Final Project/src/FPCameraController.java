@@ -199,6 +199,18 @@ lookPosition.y).put(lookPosition.z+=1).put(1.0f).flip();
         return lightPosition;
     }
     
+    public FloatBuffer day(FloatBuffer lightPosition){
+        lightPosition.put(lookPosition.x = 90).put(
+lookPosition.y).put(lookPosition.z = 90).put(1.0f).flip();
+        return lightPosition;
+    }
+    
+    public FloatBuffer night(FloatBuffer lightPosition){
+        lightPosition.put(lookPosition.x = -15).put(
+lookPosition.y).put(lookPosition.z = -15).put(1.0f).flip();
+        return lightPosition;
+    }
+    
     public FloatBuffer moveLightBackward(FloatBuffer lightPosition){
         if(lookPosition.x < -15){
             return lightPosition;

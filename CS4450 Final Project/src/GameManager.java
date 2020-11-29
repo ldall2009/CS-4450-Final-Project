@@ -36,6 +36,8 @@ public class GameManager {
     private final int TEXTURES;
     private final int LIGHTFORWARD;
     private final int LIGHTBACKWARD;
+    private final int DAY;
+    private final int NIGHT;
 
     private final int VERTICAL_AXIS;
 
@@ -63,6 +65,9 @@ public class GameManager {
         TEXTURES = input.addButton(Keyboard.KEY_Q);
         LIGHTFORWARD = input.addButton(Keyboard.KEY_E);
         LIGHTBACKWARD = input.addButton(Keyboard.KEY_R);
+        DAY = input.addButton(Keyboard.KEY_T);
+        NIGHT = input.addButton(Keyboard.KEY_Y);
+        
         TOGGLE_DEBUG_POSITION = input.addButton(Keyboard.KEY_P);
 
         JUMP = input.addButton(Keyboard.KEY_SPACE);
@@ -178,6 +183,14 @@ public class GameManager {
             
             if(input.isHeld(LIGHTBACKWARD)){
                 lightPosition = camera.moveLightBackward(lightPosition);
+            }
+            
+            if(input.isDown(DAY)){
+                lightPosition = camera.day(lightPosition);
+            }
+            
+            if(input.isDown(NIGHT)){
+                lightPosition = camera.night(lightPosition);
             }
             
             updateLight();
