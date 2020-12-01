@@ -3,8 +3,8 @@
 * author: N. Vinjamury, D. Edwards, L. Dall
 * class: CS 4450 - Computer Graphics
 *
-* assignment: Semester Project - Checkpoint 3
-* date last modified: 11/14/2020
+* assignment: Semester Project - Final
+* date last modified: 11/30/2020
 *
 * purpose: This file/class is responsible for holding our camera's
 *   position in 3D space.

@@ -1,12 +1,12 @@
 /******************************************************************************
- *       file: Axis.java
- *     author: Daniel Edwards
- *      class: CS 4450
- * assignment: Program2
+ * file: Axis.java
+ * author: D. Edwards
+ * class: CS 4450 - Computer Graphics
+ * assignment: Semester Project - Final
  * 
- * last modified: 09/20/2020
+ * last modified: 11/30/2020
  * 
- *   purpose:
+ * purpose:
  * See class's Javadoc, listed just below. With the exception of the main class,
  * standard Java documentation is used so that Netbeans can use it when giving
  * me a summary of the class. 

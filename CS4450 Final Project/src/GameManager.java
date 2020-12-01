@@ -1,11 +1,11 @@
 
 /** *************************************************************
- * file: FPCameraController.java
+ * file: GameManager.java
  * author: N. Vinjamury, D. Edwards, L. Dall
  * class: CS 4450 - Computer Graphics
  *
- * assignment: Semester Project - Checkpoint 2
- * date last modified: 11/14/2020
+ * assignment: Semester Project - Final
+ * date last modified: 11/30/2020
  *
  * purpose: This class is responsible for updating the game
  * in real time, checking for inputs and passing it along to the
@@ -56,6 +56,12 @@ public class GameManager {
     
     private int x, y, z;
 
+    
+    /***************************************************************
+    * method: GameManager
+    * purpose: constructor that initializes fields for the GameManager
+    * class - mainly controls and light position
+    ****************************************************************/
     public GameManager() {
         chunk = new Chunk((int) CHUNK_POSITION.x, (int) CHUNK_POSITION.y, (int) CHUNK_POSITION.z);
         camera = new FPCameraController(CAMERA_POSITION.x, CAMERA_POSITION.y, CAMERA_POSITION.z);
@@ -87,24 +93,30 @@ public class GameManager {
         lightPosition.put(x).put(y).put(z).put(1.0f).flip();
     }
 
+    /***************************************************************
+    * method: currentTime
+    * purpose: gets the current system time
+    ****************************************************************/
     private long currentTime() {
         //return java.time.Clock.systemUTC().instant().getNano();
         return Sys.getTime();
     }
 
+    /***************************************************************
+    * method: timeResolution
+    * purpose: gets the current system time resolution
+    ****************************************************************/
     private long timeResolution() {
         //return 1000000000;
         return Sys.getTimerResolution();
     }
 
-    /**
-     * *************************************************************
-     * method: gameLoop purpose: the primary game loop for this program.
-     * Responsible for calling relevant methods to respond to things like
-     * rendering, user input, etc.
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: gameLoop 
+    * purpose: the primary game loop for this program.
+    * Responsible for calling relevant methods to respond to things like
+    * rendering, user input, etc.
+    ****************************************************************/
     public void gameLoop() {
         float dx = 0.0f;
         float dy = 0.0f;
@@ -210,6 +222,10 @@ public class GameManager {
         Display.destroy();
     }
 
+    /***************************************************************
+    * method: updateLight
+    * purpose: updates the light on call to be at a certain position
+    ****************************************************************/
     private void updateLight() {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }

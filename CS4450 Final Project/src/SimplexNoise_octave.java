@@ -3,8 +3,8 @@
 * author: N. Vinjamury, D. Edwards, L. Dall
 * class: CS 4450 - Computer Graphics
 *
-* assignment: Semester Project - Checkpoint 3
-* date last modified: 11/14/2020
+* assignment: Semester Project - Final
+* date last modified: 11/30/2020
 *
 * purpose: This class uses a simplex noise algorithm used in our
 *   project

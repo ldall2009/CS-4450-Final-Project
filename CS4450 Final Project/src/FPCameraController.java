@@ -4,8 +4,8 @@
  * author: N. Vinjamury, D. Edwards, L. Dall
  * class: CS 4450 - Computer Graphics
  *
- * assignment: Semester Project - Checkpoint 3
- * date last modified: 11/14/2020
+ * assignment: Semester Project - Final
+ * date last modified: 11/30/2020
  *
  * purpose: This file/class is responsible for allowing the user to move
  *   and modify the first-person camera in order to interact within the
@@ -49,14 +49,12 @@ public class FPCameraController {
 	private boolean flying = false;
     private boolean hasHitGround = false;
 
-    /**
-     * *************************************************************
-     * method: FPCameraController purpose: constructor used to instantiate the
-     * position Vector3f. It instantiates the position of the user as well as
-     * their initial "look" position
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: FPCameraController 
+    * purpose: constructor used to instantiate the
+    * position Vector3f. It instantiates the position of the user 
+    * as well as their initial "look" position
+    ****************************************************************/
     public FPCameraController(float x, float y, float z) {
         position = new Vector3f(x, y, z);
         lookPosition = new Vector3f(x, y, z);
@@ -70,39 +68,49 @@ public class FPCameraController {
 
     }
 
+    /***************************************************************
+    * method: toggleDebugPosition
+    * purpose: sets the debugPosition to be the opposite of what it is
+    ****************************************************************/
     public void toggleDebugPosition() {
         debugPosition = !debugPosition;
     }
 
+    /***************************************************************
+    * method: setDebugPosiition
+    * purpose: sets the Debug position to true or false
+    ****************************************************************/
     public void setDebugPosition(boolean value) {
         debugPosition = value;
     }
-
-	public void toggleFlying() {
-		flying = !flying;
-
-		if(flying) {
-			velocity = new Vector3f();
-		}
+    
+    /***************************************************************
+    * method: toggleFlying
+    * purpose: toggles between flying mode and regular mode
+    ****************************************************************/
+    public void toggleFlying() {
+	flying = !flying;
+        
+	if(flying) {
+            velocity = new Vector3f();
 	}
+    }
 
-    /**
-     * *************************************************************
-     * method: yaw purpose: increments the camera's current yaw rotation
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: yaw 
+    * purpose: increments the camera's current yaw rotation
+    *
+    ****************************************************************/
     public void yaw(float amount) {
         // increment the yaw by the amount param
         yaw += amount;
     }
 
-    /**
-     * *************************************************************
-     * method: pitch purpose: decrements the camera's current pitch rotation
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: pitch 
+    * purpose: decrements the camera's current pitch rotation
+    *
+    ****************************************************************/
     public void pitch(float amount) {
 
         // if user is looking within a normal pitch range for a human
@@ -119,13 +127,11 @@ public class FPCameraController {
         }
     }
 
-    /**
-     * *************************************************************
-     * method: walkForward purpose: moves the camera forward relative to its
-     * current rotation (yaw)
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: walkForward 
+    * purpose: moves the camera forward relative to its
+    * current rotation (yaw)
+    ****************************************************************/
     public void walkForward(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
@@ -133,13 +139,11 @@ public class FPCameraController {
         deltaPosition.z += zOffset;
     }
 
-    /**
-     * *************************************************************
-     * method: walkBackwards purpose: moves the camera backward relative to its
-     * current rotation (yaw)
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: walkBackwards 
+    * purpose: moves the camera backwards relative to its
+    * current rotation (yaw)
+    ****************************************************************/
     public void walkBackwards(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw));
@@ -147,13 +151,11 @@ public class FPCameraController {
         deltaPosition.z -= zOffset;
     }
 
-    /**
-     * *************************************************************
-     * method: strafeLeft purpose: strafes the camera left relative to its
-     * current rotation (yaw)
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: strafeLeft
+    * purpose: strafes the camera left relative to its
+    * current rotation (yaw)
+    ****************************************************************/
     public void strafeLeft(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw - 90));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw - 90));
@@ -161,13 +163,11 @@ public class FPCameraController {
         deltaPosition.z += zOffset;
     }
 
-    /**
-     * *************************************************************
-     * method: strafeRight purpose: strafes the camera right relative to its
-     * current rotation (yaw)
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: strafeRight
+    * purpose: strafes the camera right relative to its
+    * current rotation (yaw)
+    ****************************************************************/
     public void strafeRight(float distance) {
         float xOffset = distance * (float) Math.sin(Math.toRadians(yaw + 90));
         float zOffset = distance * (float) Math.cos(Math.toRadians(yaw + 90));
@@ -175,30 +175,30 @@ public class FPCameraController {
         deltaPosition.z += zOffset;
     }
 
-    /**
-     * *************************************************************
-     * method: moveUp purpose: moves the camera up
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: moveUp
+    * purpose: moves the camera up
+    ****************************************************************/
     public void moveUp(float distance) {
-		if(flying){
-        	deltaPosition.y -= distance;
-		}
+	if(flying){
+            deltaPosition.y -= distance;
+	}
     }
 
-    /**
-     * *************************************************************
-     * method: moveDown purpose: moves the camera down
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: moveDown
+    * purpose: moves the camera down
+    ****************************************************************/
     public void moveDown(float distance) {
-		if(flying){
-        	deltaPosition.y += distance;
-		}
+	if(flying){
+            deltaPosition.y += distance;
+	}
     }
 
+    /****************************************************************
+    * method: moveLightForward
+    * purpose: moves the lightposition forward on keypress
+    ****************************************************************/
     public FloatBuffer moveLightForward(FloatBuffer lightPosition){
         if(lookPosition.x > 90){
             return lightPosition;
@@ -207,23 +207,35 @@ public class FPCameraController {
             return lightPosition;
         }
         lightPosition.put(lookPosition.x+=1).put(
-lookPosition.y).put(lookPosition.z+=1).put(1.0f).flip();
+            lookPosition.y).put(lookPosition.z+=1).put(1.0f).flip();
         
         return lightPosition;
     }
     
+    /****************************************************************
+    * method: day
+    * purpose: moves the lightposition to (90,y,90) for day effect
+    ****************************************************************/
     public FloatBuffer day(FloatBuffer lightPosition){
         lightPosition.put(lookPosition.x = 90).put(
-lookPosition.y).put(lookPosition.z = 90).put(1.0f).flip();
+            lookPosition.y).put(lookPosition.z = 90).put(1.0f).flip();
         return lightPosition;
     }
     
+    /****************************************************************
+    * method: night
+    * purpose: moves the lightposition to (-15,y,-15) for night effect
+    ****************************************************************/
     public FloatBuffer night(FloatBuffer lightPosition){
         lightPosition.put(lookPosition.x = -15).put(
-lookPosition.y).put(lookPosition.z = -15).put(1.0f).flip();
+            lookPosition.y).put(lookPosition.z = -15).put(1.0f).flip();
         return lightPosition;
     }
     
+    /****************************************************************
+    * method: moveLightBackward
+    * purpose: moves the lightposition backward on keypress
+    ****************************************************************/
     public FloatBuffer moveLightBackward(FloatBuffer lightPosition){
         if(lookPosition.x < -15){
             return lightPosition;
@@ -233,11 +245,14 @@ lookPosition.y).put(lookPosition.z = -15).put(1.0f).flip();
         }
 
         lightPosition.put(lookPosition.x-=1).put(
-lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
+            lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
         return lightPosition;
     }
     
-    
+    /****************************************************************
+    * method: jump
+    * purpose: checks if the user can jump and then applies jump force
+    ****************************************************************/
     public void jump() {
         if (!flying && hasHitGround) {
             velocity.y += JUMP_IMPULSE;
@@ -245,6 +260,10 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
         }
     }
 
+    /****************************************************************
+    * method: getCorners
+    * purpose: gets the corners of a block with vector3f center
+    ****************************************************************/
     private Vector3f[] getCorners(Vector3f center) {
         //System.out.println(center);
         float height = HEIGHT;
@@ -265,6 +284,11 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
             new Vector3f(center.x - xSize, center.y, center.z - zSize),};
     }
 
+    /****************************************************************
+    * method: getIntersections
+    * purpose: gets the intersections of a block with vector3f center
+    * in chunk chunk
+    ****************************************************************/
     private Block[] getIntersections(Chunk chunk, Vector3f center) {
         Vector3f[] corners = getCorners(center);
         ArrayList<Block> blocks = new ArrayList<>(corners.length);
@@ -280,13 +304,14 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
         return blocks.toArray(blockArray);
     }
 
-    /**
-     * Attempts to move by the given delta.
-     *
-     * @param chunk Chunk with collision data.
-     * @param delta Amount to move.
-     * @return True if entire move was executed; false otherwise.
-     */
+    /*****************************************************************
+    * method: move
+    * purpose: attempts to move by the given delta
+    *
+    * @param chunk Chunk with collision data.
+    * @param delta Amount to move.
+    * @return True if entire move was executed; false otherwise.
+    ****************************************************************/
     private boolean move(Chunk chunk, Vector3f delta) {
         Vector3f newPosition = new Vector3f();
         Vector3f.add(position, delta, newPosition);
@@ -300,6 +325,10 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
 
     }
 
+    /****************************************************************
+    * method: applyMovement
+    * purpose: applies movement based on location and time
+    ****************************************************************/
     public void applyMovement(Chunk chunk, float deltaTime) {
         if (debugPosition) {
             System.out.println(position);
@@ -334,13 +363,11 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
 
     }
 
-    /**
-     * *************************************************************
-     * method: lookThrough purpose: translates and rotates the matrix so that it
-     * looks through the camera. This does basically what gluLookAt() does
-     *
-     ***************************************************************
-     */
+    /****************************************************************
+    * method: lookThrough 
+    * purpose: translates and rotates the matrix so that it
+    * looks through the camera. This does what gluLookAt() does
+    ****************************************************************/
     public void lookThrough() {
         //glTranslatef(0f, 0f, -0.1f);
 
@@ -352,6 +379,10 @@ lookPosition.y).put(lookPosition.z-=1).put(1.0f).flip();
         glTranslatef(position.x, position.y, position.z);
     }
 
+    /****************************************************************
+    * method: glVertex
+    * purpose: prints with glvertex with a given vector3f
+    ****************************************************************/
     private void glVertex(Vector3f p) {
         glVertex3f(p.x, p.y, p.z);
     }

@@ -3,8 +3,8 @@
   * author: N. Vinjamury, D. Edwards, L. Dall
   * class: CS 4450 - Computer Graphics
   *
-  * assignment: Semester Project - Checkpoint 3
-  * date last modified: 11/14/2020
+  * assignment: Semester Project - Final
+  * date last modified: 11/30/2020
   *
   * purpose: This program generates chunks of blocks that can be rendered at once
   *   using textures and simplex noises along with blocks and coordinates to
@@ -96,10 +96,20 @@ public class Chunk {
 		this.startZ = startZ;
 	}
 
+        /***************************************************************
+	 * method: inChunk
+	 * purpose: checks position and outputs if in chunk or not
+	 *
+	 ****************************************************************/
 	private boolean inChunk(int value) { 
 		return value >= 0 && value < CHUNK_SIZE;
 	}
 	
+        /***************************************************************
+	 * method: getBlockAtPoint
+	 * purpose: provides a position and gets a block at that specific
+	 * point
+	 ****************************************************************/
 	public Block getBlockAtPoint(Vector3f position) {
 		Block result = null;
 		
